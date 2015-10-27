@@ -3,6 +3,7 @@ package com.example.compaurum.rss_reader.newparser;
 /**
  * Created by compaurum on 26.10.2015.
  */
+
 import android.database.DefaultDatabaseErrorHandler;
 
 import java.io.IOException;
@@ -19,34 +20,29 @@ import org.xml.sax.Attributes;
 import org.xml.sax.ext.DefaultHandler2;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class RssParser extends DefaultHandler
-{
-    private String        urlString;
-    private Channel       channel;
-    private StringBuilder text;
-    private Item          item;
-    private boolean       imgStatus;
+public class RssParser extends DefaultHandler {
+    private String mUrlString;
+    private Channel mCannel;
+    private StringBuilder mText;
+    private Item mItem;
+    private boolean mImgStatus;
 
-    public RssParser(String url)
-    {
-        this.urlString = url;
-        this.text = new StringBuilder();
+    public RssParser(String url) {
+        this.mUrlString = url;
+        this.mText = new StringBuilder();
     }
 
-    public void parse()
-    {
+    public void parse() {
         InputStream urlInputStream = null;
         SAXParserFactory spf = null;
         SAXParser sp = null;
 
-        try
-        {
-            URL url = new URL(this.urlString);
+        try {
+            URL url = new URL(this.mUrlString);
             //_setProxy(); // Set the proxy if needed
             urlInputStream = url.openConnection().getInputStream();
             spf = SAXParserFactory.newInstance();
-            if (spf != null)
-            {
+            if (spf != null) {
                 sp = spf.newSAXParser();
                 sp.parse(urlInputStream, this);
             }
@@ -58,113 +54,99 @@ public class RssParser extends DefaultHandler
          * ParserConfigurationException
          * IOException
          * SAXException
-         */
-
-        catch (Exception e)
-        {
+         */ catch (Exception e) {
             System.out.println("Exception e");
-                    e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
+            e.printStackTrace();
+        } finally {
+            try {
                 if (urlInputStream != null) urlInputStream.close();
+            } catch (Exception e) {
             }
-            catch (Exception e) {}
         }
     }
 
-    public Channel getFeed()
-    {
-        return (this.channel);
+    public Channel getFeed() {
+        return (this.mCannel);
     }
 
     public void startElement(String uri, String localName, String qName,
-                             Attributes attributes)
-    {
-        switch (qName.toLowerCase()){
+                             Attributes attributes) {
+        switch (qName.toLowerCase()) {
             case "channel":
-                this.channel = new Channel();
+                this.mCannel = new Channel();
                 break;
             case "item":
-                if (this.channel != null){
-                    this.item = new Item();
-                    this.channel.addItem(this.item);
+                if (this.mCannel != null) {
+                    this.mItem = new Item();
+                    this.mCannel.addItem(this.mItem);
                 }
                 break;
             case "image":
-                if (this.channel != null){
-                    this.imgStatus = true;
+                if (this.mCannel != null) {
+                    this.mImgStatus = true;
                 }
                 break;
         }
     }
 
-    public void endElement(String uri, String localName, String qName)
-    {
-        if (this.channel == null)
+    public void endElement(String uri, String localName, String qName) {
+        if (this.mCannel == null)
             return;
 
-        if (qName.equalsIgnoreCase("item"))
-            this.item = null;
+        switch (qName.toLowerCase()) {
+            case "item":
+                this.mItem = null;
+                break;
+            case "image":
+                this.mImgStatus = false;
+                break;
+            case "title":
+                if (this.mItem != null) this.mItem.setTitle(this.mText.toString().trim());
+                else if (this.mImgStatus) this.mCannel.imageTitle = this.mText.toString().trim();
+                else this.mCannel.title = this.mText.toString().trim();
+                break;
+            case "link":
+                if (this.mItem != null) this.mItem.setLink(this.mText.toString().trim());
+                else if (this.mImgStatus) this.mCannel.imageLink = this.mText.toString().trim();
+                else this.mCannel.link = this.mText.toString().trim();
+                break;
+            case "description":
+                if (this.mItem != null) this.mItem.setDescription(this.mText.toString().trim());
+                else this.mCannel.description = this.mText.toString().trim();
+                break;
+            case "url":
+                this.mCannel.imageUrl = this.mText.toString().trim();
+                break;
+            case "language":
+                this.mCannel.language = this.mText.toString().trim();
 
-        else if (qName.equalsIgnoreCase("image"))
-            this.imgStatus = false;
+            case "generator":
+                this.mCannel.generator = this.mText.toString().trim();
 
-        else if (qName.equalsIgnoreCase("title"))
-        {
-            if (this.item != null) this.item.setTitle(this.text.toString().trim());
-            else if (this.imgStatus) this.channel.imageTitle = this.text.toString().trim();
-            else this.channel.title = this.text.toString().trim();
+            case "copyright":
+                this.mCannel.copyright = this.mText.toString().trim();
+
+            case "pubDate":
+                if(this.mItem != null) this.mItem.setMpubDate(this.mText.toString().trim());
+
+            case "category":
+                if(this.mItem != null) this.mCannel.addItem(this.mText.toString().trim(), this.mItem);
         }
 
-        else if (qName.equalsIgnoreCase("link"))
-        {
-            if (this.item != null) this.item.setLink(this.text.toString().trim());
-            else if (this.imgStatus) this.channel.imageLink = this.text.toString().trim();
-            else this.channel.link = this.text.toString().trim();
-        }
-
-        else if (qName.equalsIgnoreCase("description"))
-        {
-            if (this.item != null) this.item.setDescription(this.text.toString().trim());
-            else this.channel.description = this.text.toString().trim();
-        }
-
-        else if (qName.equalsIgnoreCase("url") && this.imgStatus)
-            this.channel.imageUrl = this.text.toString().trim();
-
-        else if (qName.equalsIgnoreCase("language"))
-            this.channel.language = this.text.toString().trim();
-
-        else if (qName.equalsIgnoreCase("generator"))
-            this.channel.generator = this.text.toString().trim();
-
-        else if (qName.equalsIgnoreCase("copyright"))
-            this.channel.copyright = this.text.toString().trim();
-
-        else if (qName.equalsIgnoreCase("pubDate") && (this.item != null))
-            this.item.setMpubDate(this.text.toString().trim());
-
-        else if (qName.equalsIgnoreCase("category") && (this.item != null))
-            this.channel.addItem(this.text.toString().trim(), this.item);
-
-        this.text.setLength(0);
+        this.mText.setLength(0);
     }
 
-    public void characters(char[] ch, int start, int length)
-    {
-        this.text.append(ch, start, length);
+    public void characters(char[] ch, int start, int length) {
+        this.mText.append(ch, start, length);
     }
 
-   // public static void _setProxy()
-            //throws IOException
+    // public static void _setProxy()
+    //throws IOException
     //{
     //Properties sysProperties = System.getProperties();
-        //sysProperties.put("proxyHost<Proxy IP Address>");
-        //sysProperties.put("proxyPort<Proxy Port Number>");
-        //System.setProperties(sysProperties);
+    //sysProperties.put("proxyHost<Proxy IP Address>");
+    //sysProperties.put("proxyPort<Proxy Port Number>");
+    //System.setProperties(sysProperties);
     //}
 
 }

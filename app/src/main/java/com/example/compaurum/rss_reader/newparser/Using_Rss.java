@@ -14,16 +14,17 @@ public class Using_Rss {
         Channel feed = rp.getFeed();
 
 // Listing all categories & the no. of elements in each category
-        if (feed.category != null)
-        {
-            System.out.println("Category: ");
-            for (String category : feed.category.keySet())
+            if (feed.category != null)
             {
-                System.out.println(category
-                        + ": "
-                        + (feed.category.get(category)).size());
+                System.out.println("Category: ");
+                for (String category : feed.category.keySet())
+                {
+                    System.out.println(category
+                            + ": "
+                            + (feed.category.get(category)).size());
+                }
             }
-        }
+
 
 // Listing all items in the feed
         for (int i = 0; i < feed.items.size(); i++)
