@@ -1,31 +1,30 @@
-package com.example.compaurum.rss_reader.newparser;
+package com.example.compaurum.rss_reader.parser;
 
 /**
  * Created by compaurum on 26.10.2015.
  */
 
-import android.database.DefaultDatabaseErrorHandler;
+//import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.ext.DefaultHandler2;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class RssParser extends DefaultHandler {
+
     private String mUrlString;
     private Channel mCannel;
     private StringBuilder mText;
     private Item mItem;
     private boolean mImgStatus;
+    private Image mImage;
 
     public RssParser(String url) {
         this.mUrlString = url;
@@ -40,11 +39,21 @@ public class RssParser extends DefaultHandler {
         try {
             URL url = new URL(this.mUrlString);
             //_setProxy(); // Set the proxy if needed
-            urlInputStream = url.openConnection().getInputStream();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                urlInputStream = conn.getInputStream();
+            }
             spf = SAXParserFactory.newInstance();
             if (spf != null) {
                 sp = spf.newSAXParser();
-                sp.parse(urlInputStream, this);
+                //Log.d("ERROR", urlInputStream.toString());
+                //Log.d("ERROR", this.toString());
+                //Log.d("ERROR", sp.toString());
+               // System.out.println(urlInputStream.available());
+                    sp.parse(urlInputStream, this);
+                //System.out.println(urlInputStream == null);
+
+                //Log.d("ERROR", (String.valueOf(urlInputStream.available())));
             }
         }
 
@@ -55,9 +64,10 @@ public class RssParser extends DefaultHandler {
          * IOException
          * SAXException
          */ catch (Exception e) {
-            System.out.println("Exception e");
+            System.out.println("Exception in RssParser.java");
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
                 if (urlInputStream != null) urlInputStream.close();
             } catch (Exception e) {
@@ -83,6 +93,7 @@ public class RssParser extends DefaultHandler {
                 break;
             case "image":
                 if (this.mCannel != null) {
+                    this.mImage = new Image();
                     this.mImgStatus = true;
                 }
                 break;
@@ -102,35 +113,36 @@ public class RssParser extends DefaultHandler {
                 break;
             case "title":
                 if (this.mItem != null) this.mItem.setTitle(this.mText.toString().trim());
-                else if (this.mImgStatus) this.mCannel.imageTitle = this.mText.toString().trim();
-                else this.mCannel.title = this.mText.toString().trim();
+                else if (this.mImgStatus) this.mImage.setTitle(this.mText.toString().trim());
+                else this.mCannel.setTitle(this.mText.toString().trim());
                 break;
             case "link":
                 if (this.mItem != null) this.mItem.setLink(this.mText.toString().trim());
-                else if (this.mImgStatus) this.mCannel.imageLink = this.mText.toString().trim();
-                else this.mCannel.link = this.mText.toString().trim();
+                else if (this.mImgStatus) this.mImage.setLink(this.mText.toString().trim());
+                else this.mCannel.setLink(this.mText.toString().trim());
                 break;
             case "description":
                 if (this.mItem != null) this.mItem.setDescription(this.mText.toString().trim());
-                else this.mCannel.description = this.mText.toString().trim();
+                else this.mCannel.setDescription(this.mText.toString().trim());
                 break;
             case "url":
-                this.mCannel.imageUrl = this.mText.toString().trim();
+                this.mImage.setUrl(this.mText.toString().trim());
                 break;
             case "language":
-                this.mCannel.language = this.mText.toString().trim();
-
+                this.mCannel.setLanguage(this.mText.toString().trim());
+                break;
             case "generator":
-                this.mCannel.generator = this.mText.toString().trim();
-
-            case "copyright":
-                this.mCannel.copyright = this.mText.toString().trim();
-
+                this.mCannel.setGenerator(this.mText.toString().trim());
+                break;
             case "pubDate":
                 if(this.mItem != null) this.mItem.setMpubDate(this.mText.toString().trim());
-
+                break;
             case "category":
                 if(this.mItem != null) this.mCannel.addItem(this.mText.toString().trim(), this.mItem);
+                break;
+            case "yandex:full-text":
+                if (this.mItem != null) this.mItem.setFullText(this.mText.toString().trim());
+
         }
 
         this.mText.setLength(0);

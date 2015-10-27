@@ -1,8 +1,4 @@
-package com.example.compaurum.rss_reader.newparser;
-
-import com.example.compaurum.rss_reader.newparser.RssParser.* ;
-
-import java.util.ArrayList;
+package com.example.compaurum.rss_reader.parser;
 
 /**
  * Created by compaurum on 26.10.2015.
@@ -14,20 +10,20 @@ public class Using_Rss {
         Channel feed = rp.getFeed();
 
 // Listing all categories & the no. of elements in each category
-            if (feed.category != null)
+            if (feed.getCategory() != null)
             {
                 System.out.println("Category: ");
-                for (String category : feed.category.keySet())
+                for (String category : feed.getCategory().keySet())
                 {
                     System.out.println(category
                             + ": "
-                            + (feed.category.get(category)).size());
+                            + (feed.getCategory().get(category)).size());
                 }
             }
 
 
 // Listing all items in the feed
-        for (int i = 0; i < feed.items.size(); i++)
-            System.out.println(feed.items.get(i).getTitle());
+        for (int i = 0; i < feed.getItems().size(); i++)
+            System.out.println(feed.getItems().get(i).toString());
     }
 }

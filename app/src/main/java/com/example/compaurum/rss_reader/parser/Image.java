@@ -1,20 +1,12 @@
-package com.example.compaurum.rss_reader.ParseRss;
+package com.example.compaurum.rss_reader.parser;
 
 /**
- * Created by compaurum on 14.10.2015.
+ * Created by compaurum on 27.10.2015.
  */
 public class Image {
     private String mUrl;
     private String mTitle;
     private String mLink;
-
-    public String getLink() {
-        return mLink;
-    }
-
-    public void setLink(String link) {
-        mLink = link;
-    }
 
     public String getUrl() {
         return mUrl;
@@ -30,5 +22,18 @@ public class Image {
 
     public void setTitle(String title) {
         mTitle = title;
+    }
+
+    public String getLink() {
+        return mLink;
+    }
+
+    public void setLink(String link) {
+        mLink = link;
+    }
+
+    @Override
+    public String toString() {
+        return "Url: " + this.mUrl + "\n Title: " + mTitle + "\n Link: " + mLink;
     }
 }

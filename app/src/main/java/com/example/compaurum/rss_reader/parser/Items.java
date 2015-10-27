@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader.newparser;
+package com.example.compaurum.rss_reader.parser;
 
 import java.util.ArrayList;
 

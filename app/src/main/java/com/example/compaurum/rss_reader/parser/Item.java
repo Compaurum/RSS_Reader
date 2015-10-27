@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader.newparser;
+package com.example.compaurum.rss_reader.parser;
 
 import java.io.Serializable;
 
@@ -60,8 +60,10 @@ public class Item implements Serializable{
     public void setFullText(String fullText) {
         mFullText = fullText;
     }
+
+    @Override
     public String toString()
     {
-        return (this.mTitle + ": " + this.mpubDate + "n" + this.mDescription);
+        return (this.mTitle + " ");// + ": " + this.mpubDate + "n" + this.mDescription + "\n ---- " + this.mFullText);
     }
 }

@@ -1,7 +1,11 @@
 package com.example.compaurum.rss_reader;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,37 +14,35 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener{
+
+public class MainActivity extends ActionBarActivity {
 
     static String TAG = "default";
-    private String[] mNames = {"Mark", "John", "Idiot"};
+    private ArrayList mNames = new ArrayList();  //{"Mark", "John", "Idiot"};
     private ImageView mSaveIcon;
-    private static int sCount = 1;
     private Button mButton;
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.button:
-                mButton.setText("Clicked");
-                break;
-        }
-    }
+    private ListView mLvMain;
+    private ArrayAdapter<String> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mButton = (Button) findViewById(R.id.button);
-        ListView lvMain = (ListView) findViewById(android.R.id.list);
-        mSaveIcon = (ImageView) findViewById(R.id.toSaveIcon); // why this is null ???
-        mButton.setOnClickListener(this);
+        mNames.add("Mark");
+        mNames.add("John");
+        mNames.add("Victor");
 
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(this,R.layout.list_item, R.id.label, mNames);
-        lvMain.setAdapter(adapter);
+        mLvMain = (ListView) findViewById(android.R.id.list);
+        mButton = (Button) findViewById(R.id.button);
+        mSaveIcon = (ImageView) findViewById(R.id.toSaveIcon); // why this is null ???
+
+        mButton.setOnClickListener(new UpdateRss(this, mLvMain, mAdapter));
+
+        mAdapter = new ArrayAdapter<>(this,R.layout.list_item, R.id.label, mNames);
+        mLvMain.setAdapter(mAdapter);
     }
 
     @Override
@@ -63,6 +65,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public ArrayList getNames(){
+        return mNames;
     }
 
 
