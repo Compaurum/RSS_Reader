@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,9 +25,8 @@ public class UpdateRss implements View.OnClickListener {
     private Channel feed = null;
     private MainActivity mContext;
 
-    public UpdateRss(MainActivity context, ListView lvMain, ArrayAdapter<String> adapter) {
+    public UpdateRss(MainActivity context, ListView lvMain) {
         this.mLvMain = lvMain;
-        this.mAdapter = adapter;
         this.mContext = context;
     }
 
@@ -53,15 +53,17 @@ public class UpdateRss implements View.OnClickListener {
                 }
             });
             thread.start();
+
             try {
                 thread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             if (feed != null){
-                //mContext.getNames().clear();
-                //mContext.getNames().addAll(feed.getItems());
-                //mAdapter.notifyDataSetChanged();
+                mContext.getNames().clear();
+                mContext.getNames().addAll(feed.getItems());
+                mContext.getAdapter().notifyDataSetChanged();
             }
         } else {
             Toast.makeText(mContext, "Turn on Internet", Toast.LENGTH_SHORT).show();

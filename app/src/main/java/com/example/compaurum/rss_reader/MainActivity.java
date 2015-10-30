@@ -9,21 +9,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
 
     static String TAG = "default";
     private ArrayList mNames = new ArrayList();  //{"Mark", "John", "Idiot"};
     private ImageView mSaveIcon;
     private Button mButton;
     private ListView mLvMain;
+    private TextView channelTitle;
     private ArrayAdapter<String> mAdapter;
 
     @Override
@@ -37,9 +42,9 @@ public class MainActivity extends ActionBarActivity {
 
         mLvMain = (ListView) findViewById(android.R.id.list);
         mButton = (Button) findViewById(R.id.button);
-        mSaveIcon = (ImageView) findViewById(R.id.toSaveIcon); // why this is null ???
-
-        mButton.setOnClickListener(new UpdateRss(this, mLvMain, mAdapter));
+        mSaveIcon = (ImageButton) findViewById(R.id.toSaveIcon); // why this is null ???
+        channelTitle = (TextView) findViewById(R.id.channelTitle);
+        mButton.setOnClickListener(new UpdateRss(this, mLvMain));
 
         mAdapter = new ArrayAdapter<>(this,R.layout.list_item, R.id.label, mNames);
         mLvMain.setAdapter(mAdapter);
@@ -67,15 +72,29 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    public ListView getLvMain() {
+        return mLvMain;
+    }
+    public TextView getChannelTitle() {
+        return channelTitle;
+    }
     public ArrayList getNames(){
         return mNames;
     }
+    public ArrayAdapter<String> getAdapter() {
+        return mAdapter;
+    }
 
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        String item = (String) mAdapter.getItem(position);
+        Toast.makeText(this, item + " selected list Item", Toast.LENGTH_SHORT).show();
+    }
 
-
-//    @Override
-//    protected void onListItemClick(ListView l, View v, int position, long id) {
-//        String item = (String) getListAdapter().getItem(position);
-//        Toast.makeText(this, item + " selected", Toast.LENGTH_SHORT).show();
-//    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String item = (String) mAdapter.getItem(position);
+        Toast.makeText(this, item + " selected", Toast.LENGTH_SHORT).show();
+    }
 }

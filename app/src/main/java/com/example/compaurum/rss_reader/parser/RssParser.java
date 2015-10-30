@@ -6,15 +6,24 @@ package com.example.compaurum.rss_reader.parser;
 
 //import android.util.Log;
 
+import android.util.Log;
+import android.util.Xml;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.CharBuffer;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class RssParser extends DefaultHandler {
@@ -25,6 +34,7 @@ public class RssParser extends DefaultHandler {
     private Item mItem;
     private boolean mImgStatus;
     private Image mImage;
+    public String testString;
 
     public RssParser(String url) {
         this.mUrlString = url;
@@ -46,14 +56,17 @@ public class RssParser extends DefaultHandler {
             spf = SAXParserFactory.newInstance();
             if (spf != null) {
                 sp = spf.newSAXParser();
-                //Log.d("ERROR", urlInputStream.toString());
-                //Log.d("ERROR", this.toString());
-                //Log.d("ERROR", sp.toString());
-               // System.out.println(urlInputStream.available());
-                    sp.parse(urlInputStream, this);
-                //System.out.println(urlInputStream == null);
 
-                //Log.d("ERROR", (String.valueOf(urlInputStream.available())));
+                char[] chars = new char[8096];
+                String total = "";
+                int k;
+                //urlInputStream.read(buffer);
+                InputStreamReader inputStreamReader = new InputStreamReader(urlInputStream, "cp1251");
+                while ( (k = inputStreamReader.read(chars)) > 0){
+                    //System.out.println(k);
+                    total += new String(chars, 0, k);
+                }
+                sp.parse(new ByteArrayInputStream(total.getBytes()),this);
             }
         }
 
