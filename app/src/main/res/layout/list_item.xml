@@ -9,7 +9,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_weight="5">
+    android:layout_weight="5"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall">
 
     <TextView
         android:id="@+id/label"
@@ -30,7 +31,7 @@
 </LinearLayout>
 
 
-    <ImageButton
+    <!--ImageButton
         android:layout_weight="1"
         android:id="@+id/toSaveIcon"
         android:layout_width="36dp"
@@ -38,7 +39,6 @@
         android:src="@drawable/ic_check_circle_white_36dp"
         android:background="@color/background_material_light"
         android:layout_gravity="center"
-        android:clickable="true"
-        android:contentDescription="@string/unchekedIcon"/>
+        android:contentDescription="@string/unchekedIcon"/-->
 </LinearLayout>
 

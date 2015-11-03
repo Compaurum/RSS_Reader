@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader;
+package com.example.compaurum.rss_reader.parser;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.compaurum.rss_reader.MainActivity;
 import com.example.compaurum.rss_reader.parser.Channel;
 import com.example.compaurum.rss_reader.parser.RssParser;
 
@@ -22,7 +23,7 @@ public class UpdateRss implements View.OnClickListener {
     private ListView mLvMain;
     private ArrayAdapter<String> mAdapter;
     private String mLink = "http://www.telegraf.in.ua/rss.xml";
-    private Channel feed = null;
+    private Channel mChannel = null;
     private MainActivity mContext;
 
     public UpdateRss(MainActivity context, ListView lvMain) {
@@ -33,23 +34,16 @@ public class UpdateRss implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        ConnectivityManager connMgr = (ConnectivityManager)
+        ConnectivityManager connectivityManager = (ConnectivityManager)
                 mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-
-
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     RssParser rp = new RssParser(mLink);
                     rp.parse();
-                    feed = rp.getFeed();
-                    Log.d("ERROR", feed.toString());
-                    Log.d("ERROR", feed.getTitle() + " ");
-                    //for (int i = 0; i < feed.getItems().size(); i++) {
-                       // Log.d("FEED", feed.getItems().get(i).toString());
-                    //}
+                    mChannel = rp.getFeed();
                 }
             });
             thread.start();
@@ -60,10 +54,8 @@ public class UpdateRss implements View.OnClickListener {
                 e.printStackTrace();
             }
 
-            if (feed != null){
-                mContext.getNames().clear();
-                mContext.getNames().addAll(feed.getItems());
-                mContext.getAdapter().notifyDataSetChanged();
+            if (mChannel != null){
+                mContext.updateList(mChannel.getItems());
             }
         } else {
             Toast.makeText(mContext, "Turn on Internet", Toast.LENGTH_SHORT).show();
