@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
-import com.example.compaurum.rss_reader.parser.UpdateRss;
 
 import java.util.ArrayList;
 
@@ -53,7 +52,7 @@ public class MainActivity extends ActionBarActivity{
         mLvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), ViewItemActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ViewItem.class);
                 intent.putExtra("fullText", ((Item)mNames.get(position)).getFullText());
                 intent.putExtra("link", ((Item)mNames.get(position)).getLink());
                 intent.putExtra("date", ((Item)mNames.get(position)).getMpubDate());
@@ -64,18 +63,6 @@ public class MainActivity extends ActionBarActivity{
             }
         });
     }
-
-           /* public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(this, position + " selected list Item", Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(this, ViewItemActivity.class);
-                //intent.putExtra("fullText", ((Item)mNames.get(position)).getFullText());
-                //intent.putExtra("link", ((Item)mNames.get(position)).getLink());
-                //intent.putExtra("date", ((Item)mNames.get(position)).getMpubDate());
-                //startActivity(intent);
-                //Log.d("LOG_TAG", "itemClick: position = " + position + ", id = " + id);
-            }*/
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

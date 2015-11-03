@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader.parser;
+package com.example.compaurum.rss_reader;
 
 import android.app.Activity;
 import android.content.Context;
