@@ -23,7 +23,8 @@ public class Using_Rss {
 
 
 // Listing all items in the feed
+        System.out.println("");
         for (int i = 0; i < feed.getItems().size(); i++)
-            System.out.println(feed.getItems().get(i).toString());
+            System.out.println(feed.getItems().get(i).getMpubDate());
     }
 }

@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+//import com.example.compaurum.rss_reader.adapter.ListAdapter;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
 
@@ -22,12 +25,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity{
 
-    private ArrayList mNames = new ArrayList();  //{"Mark", "John", "Idiot"};
-    private ImageView mSaveIcon;
+    private ArrayList mFeeds = new ArrayList();  //{"Mark", "John", "Idiot"};
+    private CheckBox mFavorite;
     private Button mButton;
     private ListView mLvMain;
     private TextView channelTitle;
-    private ArrayAdapter<String> mAdapter;
+    private ArrayAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +43,10 @@ public class MainActivity extends ActionBarActivity{
 
         mLvMain = (ListView) findViewById(android.R.id.list);
         mButton = (Button) findViewById(R.id.button);
-        //mSaveIcon = (ImageButton) findViewById(R.id.toSaveIcon);
+        mFavorite = (CheckBox) findViewById(R.id.checkBox1);
         channelTitle = (TextView) findViewById(R.id.channelTitle);
-
-        mAdapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.label, mNames);
+        mAdapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.label, mFeeds);
+        //mAdapter = new ArrayAdapter(this, R.layout.list_item, mNames);
         mLvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mLvMain.setAdapter(mAdapter);
 
@@ -53,12 +56,12 @@ public class MainActivity extends ActionBarActivity{
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ViewItem.class);
-                intent.putExtra("fullText", ((Item)mNames.get(position)).getFullText());
-                intent.putExtra("link", ((Item)mNames.get(position)).getLink());
-                intent.putExtra("date", ((Item)mNames.get(position)).getMpubDate());
+                intent.putExtra("fullText", ((Item)mFeeds.get(position)).getFullText());
+                intent.putExtra("link", ((Item)mFeeds.get(position)).getLink());
+                intent.putExtra("date", ((Item)mFeeds.get(position)).getMpubDate());
                 startActivity(intent);
                 Log.d("LOG_TAG", "itemClick: position = " + position + ", id = " + id);
-                Log.d("LOG_TAG", "date " + ((Item)mNames.get(position)).getMpubDate());
+                Log.d("LOG_TAG", "date " + ((Item)mFeeds.get(position)).getMpubDate());
 
             }
         });
@@ -93,15 +96,15 @@ public class MainActivity extends ActionBarActivity{
     public TextView getChannelTitle() {
         return channelTitle;
     }
-    public ArrayList getNames(){
-        return mNames;
+    public ArrayList getFeeds(){
+        return mFeeds;
     }
     public ArrayAdapter<String> getAdapter() {
         return mAdapter;
     }
     public void updateList(Items list){
-        this.mNames.clear();
-        this.mNames.addAll(list);
+        this.mFeeds.clear();
+        this.mFeeds.addAll(list);
         this.mAdapter.notifyDataSetChanged();
     }
 

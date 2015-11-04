@@ -147,8 +147,9 @@ public class RssParser extends DefaultHandler {
             case "generator":
                 this.mCannel.setGenerator(this.mText.toString().trim());
                 break;
-            case "pubDate":
-                if(this.mItem != null) this.mItem.setMpubDate(this.mText.toString());
+            case "pubdate":
+                if(this.mItem != null) this.mItem.setMpubDate(this.mText.toString().substring(0,26));
+                System.out.println(mText.toString());
                 break;
             case "category":
                 if(this.mItem != null) this.mCannel.addItem(this.mText.toString().trim(), this.mItem);

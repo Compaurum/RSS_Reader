@@ -26,19 +26,29 @@
         android:layout_height="wrap_content"
         android:textSize="8pt"
         android:gravity="center"
-        android:text="comment"/>
+        android:text=""/>
 
 </LinearLayout>
-
-
-    <!--ImageButton
-        android:layout_weight="1"
-        android:id="@+id/toSaveIcon"
-        android:layout_width="36dp"
+    <!--android:src="@drawable/ic_check_circle_white_36dp"
+        android:background="@color/background_material_light" -->
+    <!--CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+                     android:id="@android:id/text1"
+                     android:layout_width="match_parent"
+                     android:layout_height="?android:attr/listPreferredItemHeightSmall"
+                     android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                     android:gravity="center_vertical"
+                     android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+                     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd" /-->
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_check_circle_white_36dp"
-        android:background="@color/background_material_light"
-        android:layout_gravity="center"
-        android:contentDescription="@string/unchekedIcon"/-->
+        android:layout_alignParentLeft="true"
+        android:focusable="false"
+        android:button="@drawable/checkbox"
+        android:layout_gravity="center_vertical"
+        android:focusableInTouchMode="false"
+        android:text=""/>
 </LinearLayout>
 

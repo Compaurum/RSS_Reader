@@ -12,6 +12,7 @@ public class Item implements Serializable{
     private String mCategory;
     private String mpubDate;
     private String mFullText;
+    private boolean mFavorite = false;
 
     public String getTitle() {
         return mTitle;
@@ -59,6 +60,14 @@ public class Item implements Serializable{
 
     public void setFullText(String fullText) {
         mFullText = fullText;
+    }
+
+    public boolean isFavorite() {
+        return mFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        mFavorite = favorite;
     }
 
     @Override
