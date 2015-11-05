@@ -9,11 +9,10 @@
               android:paddingTop="@dimen/activity_vertical_margin"
               tools:context=".MainActivity">
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
+        android:id="@+id/proccess"
         android:layout_gravity="center_horizontal"/>
 <TextView
     android:id="@+id/channelTitle"
