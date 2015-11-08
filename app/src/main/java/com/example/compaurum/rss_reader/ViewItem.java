@@ -2,6 +2,7 @@ package com.example.compaurum.rss_reader;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -23,7 +24,7 @@ public class ViewItem extends ActionBarActivity {
         this.mLink = getIntent().getStringExtra("link");
         this.mDate = getIntent().getStringExtra("date");
         this.mFullPage = paragraph(mFullText) + paragraph(link(mLink)) + paragraph(mDate);
-
+        this.mFullPage = mFullPage.replaceAll("&nbsp;", "</p><p>");
         mWebView = (WebView) findViewById(R.id.webView);
         mWebView.loadDataWithBaseURL(null, mFullPage, "text/html", "en_US", null);
     }
