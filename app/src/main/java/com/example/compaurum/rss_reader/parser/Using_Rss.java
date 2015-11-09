@@ -5,8 +5,8 @@ package com.example.compaurum.rss_reader.parser;
  */
 public class Using_Rss {
     public static void main(String[] args){
-        RssParser rp = new RssParser("http://www.telegraf.in.ua/rss.xml");
-        rp.parse();
+        RssParser rp = new RssParser(); //"http://www.telegraf.in.ua/rss.xml"
+        rp.parse(new String("ef"));
         Channel feed = rp.getFeed();
 
 // Listing all categories & the no. of elements in each category

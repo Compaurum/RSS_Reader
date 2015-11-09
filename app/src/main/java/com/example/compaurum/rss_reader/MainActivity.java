@@ -1,5 +1,6 @@
 package com.example.compaurum.rss_reader;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 //import com.example.compaurum.rss_reader.adapter.ListAdapter;
+import com.example.compaurum.rss_reader.Interfaces.Constants;
 import com.example.compaurum.rss_reader.parser.Channel;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
@@ -23,7 +25,7 @@ import com.example.compaurum.rss_reader.parser.Items;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity{
+public class MainActivity extends ActionBarActivity implements Constants {
 
     private ArrayList mFeeds = new ArrayList();  //{"Mark", "John", "Idiot"};
     private CheckBox mFavorite;
@@ -33,9 +35,7 @@ public class MainActivity extends ActionBarActivity{
     private ArrayAdapter mAdapter;
     static Handler handler = null;
     private boolean mUpdateButtonEnabled = true;
-    public final static int START_DOWNLOADING = 1;
-    public final static int DOWNLOADING = 2;
-    public final static int END_DOWNLOADING = 3;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,7 @@ public class MainActivity extends ActionBarActivity{
         setContentView(R.layout.activity_main);
 
         mLvMain = (ListView) findViewById(android.R.id.list);
-        mProccess = (TextView)findViewById(R.id.proccess);
-        //mButton = (Button) findViewById(R.id.button);
+        mProccess = (TextView) findViewById(R.id.proccess);
         mFavorite = (CheckBox) findViewById(R.id.checkBox1);
         channelTitle = (TextView) findViewById(R.id.channelTitle);
         mAdapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.label, mFeeds);
@@ -67,27 +66,42 @@ public class MainActivity extends ActionBarActivity{
             }
         });
 
-        handler = new Handler(){
+        handler = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 // обновляем TextView
-                switch (msg.what){
+                switch (msg.what) {
                     case START_DOWNLOADING:
                         mProccess.setText("Started");
                         mUpdateButtonEnabled = false;
+                        mProgressDialog = new ProgressDialog(MainActivity.this);
+                        mProgressDialog.setIndeterminate(true);
+                        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        mProgressDialog.setMessage("Downloading news");
+                        mProgressDialog.show();
                         break;
                     case DOWNLOADING:
-                        mProccess.setText("Dowloading");
+                        mProccess.setText("Dowloading ");
                         break;
                     case END_DOWNLOADING:
                         mProccess.setText("Ended");
-                        updateList(((Channel)msg.obj).getItems());
+                        updateList(((Channel) msg.obj).getItems());
                         mUpdateButtonEnabled = true;
+                        mProgressDialog.dismiss();
+                        break;
+                    case ERROR_DOWNLOADING:
+                        mProccess.setText("ERROR");
+                        mUpdateButtonEnabled = true;
+                        mProgressDialog.dismiss();
                         break;
                     default:
                         break;
                 }
-            };
-        };
+            }
+
+            ;
+        }
+
+        ;
     }
 
     @Override
@@ -98,7 +112,7 @@ public class MainActivity extends ActionBarActivity{
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.update).setEnabled(mUpdateButtonEnabled);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -114,7 +128,7 @@ public class MainActivity extends ActionBarActivity{
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }else if (id == R.id.update){
+        } else if (id == R.id.update) {
             new UpdateRss(this, mLvMain).update();
         }
 
@@ -125,20 +139,24 @@ public class MainActivity extends ActionBarActivity{
     public ListView getLvMain() {
         return mLvMain;
     }
+
     public TextView getChannelTitle() {
         return channelTitle;
     }
-    public ArrayList getFeeds(){
+
+    public ArrayList getFeeds() {
         return mFeeds;
     }
+
     public ArrayAdapter<String> getAdapter() {
         return mAdapter;
     }
+
     public static Handler getHandler() {
         return handler;
     }
 
-    public void updateList(Items list){
+    public void updateList(Items list) {
         this.mFeeds.clear();
         this.mFeeds.addAll(list);
         this.mAdapter.notifyDataSetChanged();

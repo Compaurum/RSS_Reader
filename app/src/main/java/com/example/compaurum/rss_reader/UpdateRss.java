@@ -12,21 +12,25 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.compaurum.rss_reader.Downloader.Downloader;
+import com.example.compaurum.rss_reader.Interfaces.Constants;
 import com.example.compaurum.rss_reader.MainActivity;
 import com.example.compaurum.rss_reader.parser.Channel;
 import com.example.compaurum.rss_reader.parser.RssParser;
 
+import java.io.IOException;
+import java.net.SocketException;
+
 /**
  * Created by compaurum on 27.10.2015.
  */
-public class UpdateRss{
+public class UpdateRss implements Constants {
 
     private ListView mLvMain;
     private ArrayAdapter<String> mAdapter;
     private String mLink = "http://www.telegraf.in.ua/rss.xml";
     private Channel mChannel = null;
     private MainActivity mContext;
-    private Message msg;
 
     public UpdateRss(MainActivity context, ListView lvMain) {
         this.mLvMain = lvMain;
@@ -41,14 +45,23 @@ public class UpdateRss{
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                mContext.getHandler().sendEmptyMessage(mContext.START_DOWNLOADING);
-                mContext.getHandler().sendEmptyMessage(mContext.DOWNLOADING);
-                RssParser rp = new RssParser(mLink);
-                rp.parse();
+                String fullText = null;
+                messageToHandler(START_DOWNLOADING);
+                messageToHandler(DOWNLOADING);
+                RssParser rp = new RssParser();
+                try {
+                    fullText = (new Downloader(UpdateRss.this)).download(mLink);
+                    rp.parse(fullText);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    Log.d("ERROR", e.getMessage());
+                    messageToHandler(ERROR_DOWNLOADING);
+                }
+                //rp.parse();
                 mChannel = rp.getFeed();
                 if (mChannel != null) {
-                    msg = mContext.getHandler().obtainMessage(mContext.END_DOWNLOADING, mChannel);
-                    mContext.getHandler().sendMessage(msg);
+                    messageToHandler(END_DOWNLOADING, mChannel);
                 }
             }
         });
@@ -69,5 +82,19 @@ public class UpdateRss{
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) return true;
         else return false;
+    }
+
+    public void messageToHandler(int what) {
+        mContext.getHandler().sendEmptyMessage(what);
+    }
+
+    public void messageToHandler(int what, Object object) {
+        Message msg = mContext.getHandler().obtainMessage(what, object);
+        mContext.getHandler().sendMessage(msg);
+    }
+
+    public void messageToHandler(int what, int arg) {
+        Message msg = mContext.getHandler().obtainMessage(what, arg, arg);
+        mContext.getHandler().sendMessage(msg);
     }
 }

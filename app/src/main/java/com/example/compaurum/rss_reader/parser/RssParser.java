@@ -6,24 +6,15 @@ package com.example.compaurum.rss_reader.parser;
 
 //import android.util.Log;
 
-import android.util.Log;
-import android.util.Xml;
+import com.example.compaurum.rss_reader.Downloader.Downloader;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.CharBuffer;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class RssParser extends DefaultHandler {
@@ -34,42 +25,23 @@ public class RssParser extends DefaultHandler {
     private Item mItem;
     private boolean mImgStatus;
     private Image mImage;
-    public String testString;
 
-    public RssParser(String url) {
-        this.mUrlString = url;
+    public RssParser() {
         this.mText = new StringBuilder();
     }
 
-    public void parse() {
+    public void parse(String fullText) {
         InputStream urlInputStream = null;
         SAXParserFactory spf = null;
         SAXParser sp = null;
-
         try {
-            URL url = new URL(this.mUrlString);
-            //_setProxy(); // Set the proxy if needed
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                urlInputStream = conn.getInputStream();
-            }
             spf = SAXParserFactory.newInstance();
             if (spf != null) {
                 sp = spf.newSAXParser();
-
-                char[] chars = new char[8096];
-                String total = "";
-                int k;
-                //urlInputStream.read(buffer);
-                InputStreamReader inputStreamReader = new InputStreamReader(urlInputStream, "cp1251");
-                while ( (k = inputStreamReader.read(chars)) > 0){
-                    //System.out.println(k);
-                    total += new String(chars, 0, k);
-                }
-                sp.parse(new ByteArrayInputStream(total.getBytes()),this);
+                //sp.parse(new ByteArrayInputStream((new Downloader()).download(mUrlString).getBytes()), this);
+                sp.parse(new ByteArrayInputStream(fullText.getBytes()), this);
             }
         }
-
         /*
          * Exceptions need to be handled
          * MalformedURLException
@@ -79,8 +51,7 @@ public class RssParser extends DefaultHandler {
          */ catch (Exception e) {
             System.out.println("Exception in RssParser.java");
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 if (urlInputStream != null) urlInputStream.close();
             } catch (Exception e) {
@@ -148,11 +119,13 @@ public class RssParser extends DefaultHandler {
                 this.mCannel.setGenerator(this.mText.toString().trim());
                 break;
             case "pubdate":
-                if(this.mItem != null) this.mItem.setMpubDate(this.mText.toString().substring(0,26));
+                if (this.mItem != null)
+                    this.mItem.setMpubDate(this.mText.toString().substring(0, 26));
                 System.out.println(mText.toString());
                 break;
             case "category":
-                if(this.mItem != null) this.mCannel.addItem(this.mText.toString().trim(), this.mItem);
+                if (this.mItem != null)
+                    this.mCannel.addItem(this.mText.toString().trim(), this.mItem);
                 break;
             case "yandex:full-text":
                 if (this.mItem != null) this.mItem.setFullText(this.mText.toString().trim());
