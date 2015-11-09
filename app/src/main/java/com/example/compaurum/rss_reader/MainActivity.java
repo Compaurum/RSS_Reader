@@ -77,6 +77,7 @@ public class MainActivity extends ActionBarActivity implements Constants {
                         mProgressDialog.setIndeterminate(true);
                         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         mProgressDialog.setMessage("Downloading news");
+                        mProgressDialog.setCancelable(false);
                         mProgressDialog.show();
                         break;
                     case DOWNLOADING:
