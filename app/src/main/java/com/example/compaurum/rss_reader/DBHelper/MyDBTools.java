@@ -9,8 +9,6 @@ import com.example.compaurum.rss_reader.Interfaces.Constants;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
 
-import java.util.ArrayList;
-
 /**
  * Created by compaurum on 09.11.2015.
  */
