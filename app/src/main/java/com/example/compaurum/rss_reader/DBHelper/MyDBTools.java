@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.compaurum.rss_reader.Interfaces.Constants;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by compaurum on 09.11.2015.
  */
-public class MyDBTools implements DatabaseConstants {
+public class MyDBTools implements Constants {
     SQLiteDatabase db;
 
     public MyDBTools(DBHelper db) {

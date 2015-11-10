@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements Constants, View.OnClickListener {
 
-    private Items mFeeds = new Items();  //{"Mark", "John", "Idiot"};
+    private Items mFeeds = new Items();
     private CheckBox mFavorite;
     private TextView mProccess;
     private ListView mLvMain;
@@ -50,7 +50,6 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         findViewById(R.id.buttonInsert).setOnClickListener(this);
         findViewById(R.id.buttonSelect).setOnClickListener(this);
         findViewById(R.id.buttonDelete).setOnClickListener(this);
-
         ///////////////////////
 
         mLvMain = (ListView) findViewById(android.R.id.list);
@@ -62,14 +61,14 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         mLvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mLvMain.setAdapter(mAdapter);
 
-        //mButton.setOnClickListener(new UpdateRss(this, mLvMain));
+        mFavorite.setOnClickListener(this);
         mLvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ViewItem.class);
                 intent.putExtra("fullText", ((Item) mFeeds.get(position)).getFullText());
                 intent.putExtra("link", ((Item) mFeeds.get(position)).getLink());
-                intent.putExtra("date", ((Item) mFeeds.get(position)).getMpubDate());
+                intent.putExtra("date", ((Item) mFeeds.get(position)).getpubDateString());
                 startActivity(intent);
                 Log.d("LOG_TAG", "itemClick: position = " + position + ", id = " + id);
                 Log.d("LOG_TAG", "date " + ((Item) mFeeds.get(position)).getMpubDate());
@@ -182,12 +181,17 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
                 myDBTools.insert(mFeeds);
                 break;
             case R.id.buttonSelect:
-                this.mFeeds.addAll(myDBTools.selectAll());
-                mAdapter.notifyDataSetChanged();
+                Items items = myDBTools.selectAll();
+                if (items != null) {
+                    this.mFeeds.addAll(items);
+                    mAdapter.notifyDataSetChanged();
+                }
                 break;
             case R.id.buttonDelete:
                 myDBTools.deleteAll();
                 break;
+            case R.id.checkBox1:
+                if (mFavorite.isChecked());
         }
     }
 }

@@ -30,6 +30,7 @@ public class Downloader {
     public Downloader(UpdateRss updateRss) {
         this.mUpdateRss = updateRss;
     }
+    public Downloader() {}
 
     public String download(String url) throws NullPointerException, IOException, TimeoutException {
         if (url == null) {
@@ -62,8 +63,8 @@ public class Downloader {
         return fullText;
     }
 
-    private void publishProgress(int what) {
-        mUpdateRss.messageToHandler(what);
-    }
+//    private void publishProgress(int what) {
+//        mUpdateRss.messageToHandler(what);
+//    }
 
 }

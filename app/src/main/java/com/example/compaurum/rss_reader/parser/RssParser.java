@@ -120,7 +120,7 @@ public class RssParser extends DefaultHandler {
                 break;
             case "pubdate":
                 if (this.mItem != null)
-                    this.mItem.setMpubDate(this.mText.toString().substring(0, 26));
+                    this.mItem.setMpubDate(this.mText.toString().trim());
                 System.out.println(mText.toString());
                 break;
             case "category":
