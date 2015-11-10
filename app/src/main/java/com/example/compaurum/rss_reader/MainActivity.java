@@ -17,30 +17,41 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 //import com.example.compaurum.rss_reader.adapter.ListAdapter;
+import com.example.compaurum.rss_reader.DBHelper.MyDBTools;
 import com.example.compaurum.rss_reader.Interfaces.Constants;
 import com.example.compaurum.rss_reader.parser.Channel;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
+import com.example.compaurum.rss_reader.DBHelper.DBHelper;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity implements Constants {
+public class MainActivity extends ActionBarActivity implements Constants, View.OnClickListener {
 
-    private ArrayList mFeeds = new ArrayList();  //{"Mark", "John", "Idiot"};
+    private Items mFeeds = new Items();  //{"Mark", "John", "Idiot"};
     private CheckBox mFavorite;
     private TextView mProccess;
     private ListView mLvMain;
     private TextView channelTitle;
     private ArrayAdapter mAdapter;
-    static Handler handler = null;
+    Handler handler = null;
     private boolean mUpdateButtonEnabled = true;
     private ProgressDialog mProgressDialog;
+    private DBHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ///////--------delete after test----------///////
+
+        findViewById(R.id.buttonInsert).setOnClickListener(this);
+        findViewById(R.id.buttonSelect).setOnClickListener(this);
+        findViewById(R.id.buttonDelete).setOnClickListener(this);
+
+        ///////////////////////
 
         mLvMain = (ListView) findViewById(android.R.id.list);
         mProccess = (TextView) findViewById(R.id.proccess);
@@ -153,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements Constants {
         return mAdapter;
     }
 
-    public static Handler getHandler() {
+    public Handler getHandler() {
         return handler;
     }
 
@@ -161,5 +172,22 @@ public class MainActivity extends ActionBarActivity implements Constants {
         this.mFeeds.clear();
         this.mFeeds.addAll(list);
         this.mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClick(View v) {
+        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
+        switch (v.getId()) {
+            case R.id.buttonInsert:
+                myDBTools.insert(mFeeds);
+                break;
+            case R.id.buttonSelect:
+                this.mFeeds.addAll(myDBTools.selectAll());
+                mAdapter.notifyDataSetChanged();
+                break;
+            case R.id.buttonDelete:
+                myDBTools.deleteAll();
+                break;
+        }
     }
 }
