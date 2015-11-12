@@ -13,14 +13,14 @@ import com.example.compaurum.rss_reader.Interfaces.Constants;
 public class DBHelper extends SQLiteOpenHelper implements Constants {
 
     public DBHelper(Context context) {
-        // конструктор суперкласса
+        // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃСѓРїРµСЂРєР»Р°СЃСЃР°
         super(context, "MyDB", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(LOG_TAG, "--- onCreate database ---");
-        // создаем таблицу с полями
+        // СЃРѕР·РґР°РµРј С‚Р°Р±Р»РёС†Сѓ СЃ РїРѕР»СЏРјРё
         db.execSQL("create table "+TABLE_NAME+" (" +
                 Fields.id.name() + " integer primary key autoincrement," +
                 Fields.title.name() + " text," +

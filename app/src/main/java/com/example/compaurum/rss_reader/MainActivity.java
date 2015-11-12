@@ -1,5 +1,6 @@
 package com.example.compaurum.rss_reader;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
@@ -15,9 +16,9 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
-//import com.example.compaurum.rss_reader.adapter.ListAdapter;
 import com.example.compaurum.rss_reader.DBHelper.MyDBTools;
 import com.example.compaurum.rss_reader.Interfaces.Constants;
+import com.example.compaurum.rss_reader.adapter.ListAdapter;
 import com.example.compaurum.rss_reader.parser.Channel;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
@@ -26,14 +27,14 @@ import com.example.compaurum.rss_reader.DBHelper.DBHelper;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity implements Constants, View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements Constants, View.OnClickListener{
 
     private Items mFeeds = new Items();
     private CheckBox mFavorite;
     private TextView mProccess;
     private ListView mLvMain;
     private TextView channelTitle;
-    private ArrayAdapter mAdapter;
+    private ListAdapter mAdapter;
     Handler handler = null;
     private boolean mUpdateButtonEnabled = true;
     private ProgressDialog mProgressDialog;
@@ -43,6 +44,7 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         ///////--------delete after test----------///////
 
@@ -55,12 +57,12 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         mProccess = (TextView) findViewById(R.id.proccess);
         mFavorite = (CheckBox) findViewById(R.id.checkBox1);
         channelTitle = (TextView) findViewById(R.id.channelTitle);
-        mAdapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.label, mFeeds);
+        //mAdapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.label, mFeeds);
+        mAdapter = new ListAdapter(this, mFeeds);
         //mAdapter = new ArrayAdapter(this, R.layout.list_item, mNames);
-        mLvMain.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mLvMain.setAdapter(mAdapter);
 
-        mFavorite.setOnClickListener(this);
         mLvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -158,7 +160,7 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         return mFeeds;
     }
 
-    public ArrayAdapter<String> getAdapter() {
+    public ListAdapter getAdapter() {
         return mAdapter;
     }
 
@@ -189,8 +191,6 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
             case R.id.buttonDelete:
                 myDBTools.deleteAll();
                 break;
-            case R.id.checkBox1:
-                if (mFavorite.isChecked());
         }
     }
 }

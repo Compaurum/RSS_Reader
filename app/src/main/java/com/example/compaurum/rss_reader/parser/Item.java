@@ -17,7 +17,7 @@ public class Item implements Serializable{
     private Date mpubDate;
     private String mpubDateString;
     private String mFullText;
-    private boolean mFavorite = false;
+    private boolean mFavorite;
 
     public Item(){}
 
@@ -99,9 +99,9 @@ public class Item implements Serializable{
         mFavorite = favorite;
     }
 
-    @Override
+   /* @Override
     public String toString()
     {
         return (this.mTitle + " ");// + ": " + this.mpubDate + "n" + this.mDescription + "\n ---- " + this.mFullText);
-    }
+    }*/
 }
