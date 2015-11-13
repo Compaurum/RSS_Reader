@@ -24,40 +24,58 @@ public class MyDBTools implements Constants {
             insert(item);
         }
     }
+
+    private boolean isExist(Item item){
+        String[] columns = new String[] {Fields.date.name()};
+        String selection =Fields.date.name() + " = ? and " + Fields.title.name() + " = ? ";
+        String[] selection_args = new String[] {
+                String.valueOf(item.getMpubDate().getTime()),
+                item.getTitle()
+        };
+        Cursor cursor = db.query(TABLE_NAME, columns, selection, selection_args, null, null, null);
+        return (cursor.getCount() > 0);
+    }
+
     public void insert(Item item){
+        if (isExist(item)){
+            Log.d("DATABASE", "Already exist");
+            return;
+        }
+        Log.d("DATABASE", "Inserted");
         ContentValues contentValues = new ContentValues();
         contentValues.put(Fields.title.name(), item.getTitle());
         contentValues.put(Fields.link.name(), item.getLink());
         contentValues.put(Fields.fulltext.name(), item.getFullText());
-        db.insert(TABLE_NAME, null, contentValues);
+        contentValues.put(Fields.favorite.name(), item.isFavorite());
+        contentValues.put(Fields.date.name(), item.getMpubDate().getTime());
+        db.insertOrThrow(TABLE_NAME, null, contentValues);
     }
+
     public void deleteAll(){
         db.delete(TABLE_NAME, null, null);
     }
 
     public Items selectAll(){
         Items items = null;
-        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            items = new Items();
-            do {
-                Item item = new Item();
-                item.setTitle(cursor.getString(Fields.title.ordinal()));
-                item.setLink(cursor.getString(Fields.link.ordinal()));
-                item.setFullText(cursor.getString(Fields.fulltext.ordinal()));
-                items.add(item);
-                // получаем значения по номерам столбцов и пишем все в лог
-                Log.d(LOG_TAG,
-                        Fields.id.name() + " = " + cursor.getInt(Fields.id.ordinal()) + ", " +
-                        Fields.title.name() + " = " + cursor.getString(Fields.title.ordinal()) + ", " +
-                        Fields.link.name() + " = " + cursor.getString(Fields.link.ordinal()) + ", " +
-                        Fields.fulltext.name() + " = " + cursor.getString(Fields.fulltext.ordinal()));
-                // переход на следующую строку
-                // а если следующей нет (текущая - последняя), то false - выходим из цикла
-            } while (cursor.moveToNext());
-        } else
-            Log.d(LOG_TAG, "0 rows");
-        cursor.close();
+        String orderBy = Fields.date.name() + " desc ";
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, orderBy);
+        try {
+            if (cursor.moveToFirst()) {
+                items = new Items();
+                do {
+                    Item item = new Item();
+                    item.setTitle(cursor.getString(Fields.title.ordinal()));
+                    item.setLink(cursor.getString(Fields.link.ordinal()));
+                    item.setFullText(cursor.getString(Fields.fulltext.ordinal()));
+                    item.setFavorite(cursor.getInt(Fields.favorite.ordinal()) == 1 ? true : false);
+                    item.setMpubDate(cursor.getLong(Fields.date.ordinal()));
+                    items.add(item);
+                } while (cursor.moveToNext());
+            } else
+                Log.d(LOG_TAG, "0 rows");
+        } finally {
+            cursor.close();
+        }
         return items;
     }
 }

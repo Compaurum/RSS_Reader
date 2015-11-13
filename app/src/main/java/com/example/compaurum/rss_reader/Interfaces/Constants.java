@@ -5,7 +5,7 @@ package com.example.compaurum.rss_reader.Interfaces;
  */
 public interface Constants {
 
-    enum Fields {id, title, link, fulltext}
+    enum Fields {id, title, link, fulltext,favorite, date}
     final static String LOG_TAG = "MyLogs";
     final static String TABLE_NAME = "feeds";
 

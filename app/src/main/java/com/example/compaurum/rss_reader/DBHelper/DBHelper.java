@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper implements Constants {
 
     public DBHelper(Context context) {
         // конструктор суперкласса
-        super(context, "MyDB", null, 1);
+        super(context, "MyDB", null, 2);
     }
 
     @Override
@@ -26,11 +26,22 @@ public class DBHelper extends SQLiteOpenHelper implements Constants {
                 Fields.title.name() + " text," +
                 Fields.link.name() + " text, " +
                 Fields.fulltext.name() + " text " +
+                Fields.favorite.name() + " integer " +
+                Fields.date.name() + " integer " +
                 ");");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion == 1 && newVersion == 2){
+            db.beginTransaction();
+            try {
+                db.execSQL(" alter table " + TABLE_NAME + " add column " + Fields.favorite.name() + " integer ;");
+                db.execSQL(" alter table " + TABLE_NAME + " add column " + Fields.date.name() + " integer ;");
+                db.setTransactionSuccessful();
+            }finally {
+                db.endTransaction();
+            }
+        }
     }
 }

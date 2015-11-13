@@ -83,6 +83,10 @@ public class Item implements Serializable{
         }
     }
 
+    public void setMpubDate(long mpubDate) {
+            this.mpubDate = new Date(mpubDate);
+    }
+
     public String getFullText() {
         return mFullText;
     }
