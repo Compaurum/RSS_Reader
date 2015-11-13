@@ -77,7 +77,7 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
             }
         });
 
-        loadFromBase();
+        loadFromBase(null);
 
         handler = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -167,9 +167,9 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
     }
 
     public void updateList(Items list) {
-        this.mFeeds.clear();
-        this.mFeeds.addAll(list);
-        this.mAdapter.notifyDataSetChanged();
+        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
+        myDBTools.insert(list);
+        loadFromBase(myDBTools);
     }
 
     @Override
@@ -192,10 +192,15 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         }
     }
 
-    public void loadFromBase(){
-        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
+    public void loadFromBase(MyDBTools tools){
+        MyDBTools myDBTools ;
+        if (tools == null){
+            myDBTools = new MyDBTools(new DBHelper(this));
+        }else myDBTools = tools;
+
         Items items = myDBTools.selectAll();
         if (items != null) {
+            this.mFeeds.clear();
             this.mFeeds.addAll(items);
             mAdapter.notifyDataSetChanged();
         }

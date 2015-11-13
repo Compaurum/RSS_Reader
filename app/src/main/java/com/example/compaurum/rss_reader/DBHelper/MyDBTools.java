@@ -13,7 +13,7 @@ import com.example.compaurum.rss_reader.parser.Items;
  * Created by compaurum on 09.11.2015.
  */
 public class MyDBTools implements Constants {
-    SQLiteDatabase db;
+    private SQLiteDatabase db;
 
     public MyDBTools(DBHelper db) {
         this.db = db.getWritableDatabase();
