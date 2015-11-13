@@ -1,5 +1,6 @@
 package com.example.compaurum.rss_reader.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.example.compaurum.rss_reader.MainActivity;
 import com.example.compaurum.rss_reader.R;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
@@ -26,11 +28,12 @@ import java.util.List;
 public class ListAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     ArrayList<Item> objects;
+    MainActivity mActivity;
 
-    public ListAdapter(Context context, ArrayList<Item> items) {
-        //this.context = context;
+    public ListAdapter(MainActivity activity, ArrayList<Item> items) {
+        this.mActivity = activity;
         this.objects = items;
-        this.layoutInflater = LayoutInflater.from(context);
+        this.layoutInflater = LayoutInflater.from(activity);
         //this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -98,6 +101,7 @@ public class ListAdapter extends BaseAdapter {
         public void onClick(View v) {
             boolean checked = ((Item)v.getTag()).isFavorite();
             ((Item) v.getTag()).setFavorite(!checked);
+            mActivity.update((Item) v.getTag());
         }
     };
 

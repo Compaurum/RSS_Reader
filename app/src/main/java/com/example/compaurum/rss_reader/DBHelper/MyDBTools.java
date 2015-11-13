@@ -45,7 +45,17 @@ public class MyDBTools implements Constants {
         db.delete(TABLE_NAME, whereClause, whereArgs);
     }
 
+    public void update(Item item){
+        String whereClause = Fields.date.name() + " = ? and " + Fields.title.name() + " = ? ";
+        String[] whereArgs = new String[]{
+                String.valueOf(item.getMpubDate().getTime()),
+                item.getTitle()
+        };
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Fields.favorite.name(), item.isFavorite());
 
+        db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
+    }
 
     public void insert(Item item){
         if (isExist(item)){

@@ -27,7 +27,7 @@ import com.example.compaurum.rss_reader.DBHelper.DBHelper;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity implements Constants, View.OnClickListener{
+public class MainActivity extends ActionBarActivity implements Constants{
 
     private Items mFeeds = new Items();
     private CheckBox mFavorite;
@@ -44,14 +44,6 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        ///////--------delete after test----------///////
-
-        findViewById(R.id.buttonInsert).setOnClickListener(this);
-        findViewById(R.id.buttonSelect).setOnClickListener(this);
-        findViewById(R.id.buttonDelete).setOnClickListener(this);
-        ///////////////////////
 
         mLvMain = (ListView) findViewById(android.R.id.list);
         mProccess = (TextView) findViewById(R.id.proccess);
@@ -197,24 +189,9 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         updateListView();
     }
 
-    @Override
-    public void onClick(View v) {
+    public void update(Item item){
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
-        switch (v.getId()) {
-            case R.id.buttonInsert:
-                myDBTools.insert(mFeeds);
-                break;
-            case R.id.buttonSelect:
-                Items items = myDBTools.selectAll();
-                if (items != null) {
-                    this.mFeeds.addAll(items);
-                    mAdapter.notifyDataSetChanged();
-                }
-                break;
-            case R.id.buttonDelete:
-                myDBTools.deleteAll();
-                break;
-        }
+        myDBTools.update(item);
     }
 
     public void loadFromBase(MyDBTools tools){
