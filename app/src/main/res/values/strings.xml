@@ -7,4 +7,6 @@
     <string name="unchekedIcon">unchekedIcon</string>
     <string name="title_activity_view_item">ViewItemActivity</string>
     <string name="lookOnWebSite">Посмотреть на сайте</string>
+    <string name="Update_news">Update news</string>
+    <string name="Clear">Clear</string>
 </resources>

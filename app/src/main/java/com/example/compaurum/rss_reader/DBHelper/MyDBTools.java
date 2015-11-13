@@ -27,14 +27,25 @@ public class MyDBTools implements Constants {
 
     private boolean isExist(Item item){
         String[] columns = new String[] {Fields.date.name()};
-        String selection =Fields.date.name() + " = ? and " + Fields.title.name() + " = ? ";
-        String[] selection_args = new String[] {
+        String selection = Fields.date.name() + " = ? and " + Fields.title.name() + " = ? ";
+        String[] selection_args = new String[]{
                 String.valueOf(item.getMpubDate().getTime()),
                 item.getTitle()
         };
         Cursor cursor = db.query(TABLE_NAME, columns, selection, selection_args, null, null, null);
         return (cursor.getCount() > 0);
     }
+
+    public void delete(Item item){
+        String whereClause = Fields.date.name() + " = ? and " + Fields.title.name() + " = ? ";
+        String[] whereArgs = new String[]{
+                String.valueOf(item.getMpubDate().getTime()),
+                item.getTitle()
+        };
+        db.delete(TABLE_NAME, whereClause, whereArgs);
+    }
+
+
 
     public void insert(Item item){
         if (isExist(item)){

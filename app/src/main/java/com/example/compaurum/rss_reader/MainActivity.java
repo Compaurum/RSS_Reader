@@ -77,6 +77,15 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
             }
         });
 
+        mLvMain.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                delete(mFeeds.get(position));
+                return true;
+            }
+        });
+
         loadFromBase(null);
 
         handler = new Handler() {
@@ -136,10 +145,12 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings){
             return true;
-        } else if (id == R.id.update) {
+        } else if (id == R.id.update){
             new UpdateRss(this, mLvMain).update();
+        } else if (id == R.id.clear){
+            deleteAll();
         }
 
         return super.onOptionsItemSelected(item);
@@ -148,10 +159,6 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
 
     public ListView getLvMain() {
         return mLvMain;
-    }
-
-    public TextView getChannelTitle() {
-        return channelTitle;
     }
 
     public ArrayList getFeeds() {
@@ -170,6 +177,24 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.insert(list);
         loadFromBase(myDBTools);
+    }
+
+    public void updateListView(){
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void deleteAll(){
+        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
+        myDBTools.deleteAll();
+        mFeeds.clear();
+        updateListView();
+    }
+
+    public void delete(Item item){
+        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
+        myDBTools.delete(item);
+        mFeeds.remove(item);
+        updateListView();
     }
 
     @Override
@@ -202,7 +227,7 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
         if (items != null) {
             this.mFeeds.clear();
             this.mFeeds.addAll(items);
-            mAdapter.notifyDataSetChanged();
+            updateListView();
         }
     }
 }
