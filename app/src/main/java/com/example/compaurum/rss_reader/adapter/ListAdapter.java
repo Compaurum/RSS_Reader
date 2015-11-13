@@ -105,6 +105,7 @@ public class ListAdapter extends BaseAdapter {
         }
     };
 
+    /*
     CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -115,4 +116,5 @@ public class ListAdapter extends BaseAdapter {
             Log.d("LISTENER", ((Item) buttonView.getTag()).isFavorite()+"");
         }
     };
+    */
 }

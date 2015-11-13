@@ -63,14 +63,13 @@ public class MainActivity extends ActionBarActivity implements Constants{
                 intent.putExtra("link", ((Item) mFeeds.get(position)).getLink());
                 intent.putExtra("date", ((Item) mFeeds.get(position)).getpubDateString());
                 startActivity(intent);
-                Log.d("LOG_TAG", "itemClick: position = " + position + ", id = " + id);
-                Log.d("LOG_TAG", "date " + ((Item) mFeeds.get(position)).getMpubDate());
+                //Log.d("LOG_TAG", "itemClick: position = " + position + ", id = " + id);
+                //Log.d("LOG_TAG", "date " + ((Item) mFeeds.get(position)).getMpubDate());
 
             }
         });
 
         mLvMain.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 delete(mFeeds.get(position));
