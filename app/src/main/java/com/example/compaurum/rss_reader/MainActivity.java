@@ -77,6 +77,8 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
             }
         });
 
+        loadFromBase();
+
         handler = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 // обновляем TextView
@@ -109,11 +111,7 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
                         break;
                 }
             }
-
-            ;
-        }
-
-        ;
+        };
     }
 
     @Override
@@ -191,6 +189,15 @@ public class MainActivity extends ActionBarActivity implements Constants, View.O
             case R.id.buttonDelete:
                 myDBTools.deleteAll();
                 break;
+        }
+    }
+
+    public void loadFromBase(){
+        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
+        Items items = myDBTools.selectAll();
+        if (items != null) {
+            this.mFeeds.addAll(items);
+            mAdapter.notifyDataSetChanged();
         }
     }
 }
