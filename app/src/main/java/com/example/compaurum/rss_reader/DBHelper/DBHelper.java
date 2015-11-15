@@ -25,8 +25,8 @@ public class DBHelper extends SQLiteOpenHelper implements Constants {
                 Fields.id.name() + " integer primary key autoincrement," +
                 Fields.title.name() + " text," +
                 Fields.link.name() + " text, " +
-                Fields.fulltext.name() + " text " +
-                Fields.favorite.name() + " integer " +
+                Fields.fulltext.name() + " text, " +
+                Fields.favorite.name() + " integer, " +
                 Fields.date.name() + " integer " +
                 ");");
     }
