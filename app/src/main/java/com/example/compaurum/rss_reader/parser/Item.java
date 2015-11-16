@@ -6,9 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by compaurum on 14.10.2015.
- */
 public class Item implements Serializable{
     private String mTitle;
     private String mLink;

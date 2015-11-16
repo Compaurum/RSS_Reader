@@ -21,9 +21,6 @@ import com.example.compaurum.rss_reader.parser.RssParser;
 import java.io.IOException;
 import java.net.SocketException;
 
-/**
- * Created by compaurum on 27.10.2015.
- */
 public class UpdateRss implements Constants {
 
     private ListView mLvMain;

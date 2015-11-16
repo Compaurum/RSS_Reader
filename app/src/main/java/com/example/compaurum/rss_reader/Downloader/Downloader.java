@@ -15,9 +15,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.concurrent.TimeoutException;
 
-/**
- * Created by compaurum on 09.11.2015.
- */
 public class Downloader {
 
     private String mUrlString;

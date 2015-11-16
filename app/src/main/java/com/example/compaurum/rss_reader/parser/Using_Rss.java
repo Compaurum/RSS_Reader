@@ -16,9 +16,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-/**
- * Created by compaurum on 26.10.2015.
- */
 public class Using_Rss {
 
     public static void main(String[] args) throws ParseException {

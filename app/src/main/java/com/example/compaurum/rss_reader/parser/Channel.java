@@ -3,9 +3,6 @@ package com.example.compaurum.rss_reader.parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by compaurum on 26.10.2015.
- */
 public class Channel {
     private String title;
     private String description;

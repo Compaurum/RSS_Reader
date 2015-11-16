@@ -1,8 +1,5 @@
 package com.example.compaurum.rss_reader.Interfaces;
 
-/**
- * Created by compaurum on 09.11.2015.
- */
 public interface Constants {
 
     enum Fields {id, title, link, fulltext,favorite, date}

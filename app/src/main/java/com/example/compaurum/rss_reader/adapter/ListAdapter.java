@@ -21,10 +21,6 @@ import com.example.compaurum.rss_reader.parser.Items;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by compaurum on 03.11.2015.
- */
-
 public class ListAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     ArrayList<Item> objects;

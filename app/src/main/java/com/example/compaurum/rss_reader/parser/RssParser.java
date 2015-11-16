@@ -1,11 +1,5 @@
 package com.example.compaurum.rss_reader.parser;
 
-/**
- * Created by compaurum on 26.10.2015.
- */
-
-//import android.util.Log;
-
 import com.example.compaurum.rss_reader.Downloader.Downloader;
 
 import java.io.ByteArrayInputStream;

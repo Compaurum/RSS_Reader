@@ -9,9 +9,6 @@ import com.example.compaurum.rss_reader.Interfaces.Constants;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
 
-/**
- * Created by compaurum on 09.11.2015.
- */
 public class MyDBTools implements Constants {
     private SQLiteDatabase db;
 
