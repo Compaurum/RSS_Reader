@@ -1,9 +1,11 @@
 package com.example.compaurum.rss_reader;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +23,7 @@ import com.example.compaurum.rss_reader.parser.RssParser;
 import java.io.IOException;
 import java.net.SocketException;
 
-public class UpdateRss implements Constants {
+public class UpdateRss extends AsyncTask implements Constants {
 
     private ListView mLvMain;
     private ArrayAdapter<String> mAdapter;
@@ -29,9 +31,9 @@ public class UpdateRss implements Constants {
     private Channel mChannel = null;
     private MainActivity mContext;
 
-    public UpdateRss(MainActivity context, ListView lvMain) {
+    public UpdateRss(Context context, ListView lvMain) {
         this.mLvMain = lvMain;
-        this.mContext = context;
+        this.mContext = (MainActivity)context;
     }
 
     public void update() {
@@ -39,38 +41,7 @@ public class UpdateRss implements Constants {
             Toast.makeText(mContext, "Turn on Internet", Toast.LENGTH_SHORT).show();
             return;
         }
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String fullText = null;
-                messageToHandler(START_DOWNLOADING);
-                messageToHandler(DOWNLOADING);
-                RssParser rp = new RssParser();
-                try {
-                    fullText = (new Downloader(UpdateRss.this)).download(mLink);
-                    rp.parse(fullText);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }catch (Exception e){
-                    Log.d("ERROR", e.getMessage());
-                    messageToHandler(ERROR_DOWNLOADING);
-                }
-                //rp.parse();
-                mChannel = rp.getFeed();
-                if (mChannel != null) {
-                    messageToHandler(END_DOWNLOADING, mChannel);
-                }
-            }
-        });
-        thread.start();
-//        try {
-//            thread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        if (mChannel != null) {
-//            mContext.updateList(mChannel.getItems());
-//        }
+        this.execute();
     }
 
     public boolean isInternet() {
@@ -81,17 +52,40 @@ public class UpdateRss implements Constants {
         else return false;
     }
 
-    public void messageToHandler(int what) {
-        mContext.getHandler().sendEmptyMessage(what);
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mContext.getProccess().setText("Started");
+        mContext.setProgressDialog(true);
     }
 
-    public void messageToHandler(int what, Object object) {
-        Message msg = mContext.getHandler().obtainMessage(what, object);
-        mContext.getHandler().sendMessage(msg);
+    @Override
+    protected void onPostExecute(Object o) {
+        super.onPostExecute(o);
+        mContext.updateList(((Channel) o).getItems());
+        mContext.setProgressDialog(false);
     }
 
-    public void messageToHandler(int what, int arg) {
-        Message msg = mContext.getHandler().obtainMessage(what, arg, arg);
-        mContext.getHandler().sendMessage(msg);
+    @Override
+    protected Object doInBackground(Object[] params) {
+        String fullText = null;
+        RssParser rp = new RssParser();
+        try {
+            fullText = (new Downloader(UpdateRss.this)).download(mLink);
+            rp.parse(fullText);
+        } catch (IOException e) {
+            Log.d("ERROR", e.getMessage());
+        }catch (Exception e){
+            Log.d("ERROR", e.getMessage());
+        }
+        mChannel = rp.getFeed();
+
+        return mChannel;
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        mContext.setProgressDialog(false);
     }
 }

@@ -76,42 +76,7 @@ public class MainActivity extends ActionBarActivity implements Constants{
                 return true;
             }
         });
-
         loadFromBase(null);
-
-        handler = new Handler() {
-            public void handleMessage(android.os.Message msg) {
-                // обновляем TextView
-                switch (msg.what) {
-                    case START_DOWNLOADING:
-                        mProccess.setText("Started");
-                        mUpdateButtonEnabled = false;
-                        mProgressDialog = new ProgressDialog(MainActivity.this);
-                        mProgressDialog.setIndeterminate(true);
-                        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        mProgressDialog.setMessage("Downloading news");
-                        mProgressDialog.setCancelable(false);
-                        mProgressDialog.show();
-                        break;
-                    case DOWNLOADING:
-                        mProccess.setText("Dowloading ");
-                        break;
-                    case END_DOWNLOADING:
-                        mProccess.setText("Ended");
-                        updateList(((Channel) msg.obj).getItems());
-                        mUpdateButtonEnabled = true;
-                        mProgressDialog.dismiss();
-                        break;
-                    case ERROR_DOWNLOADING:
-                        mProccess.setText("ERROR");
-                        mUpdateButtonEnabled = true;
-                        mProgressDialog.dismiss();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
     }
 
     @Override
@@ -147,6 +112,26 @@ public class MainActivity extends ActionBarActivity implements Constants{
         return super.onOptionsItemSelected(item);
     }
 
+    public TextView getProccess() {
+        return mProccess;
+    }
+
+    public void setProgressDialog(boolean bool){
+        if (bool) {
+            mProccess.setText("Started");
+            mUpdateButtonEnabled = false;
+            mProgressDialog = new ProgressDialog(MainActivity.this);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.setMessage("Downloading news");
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+        }else{
+            mProccess.setText("Ended");
+            mUpdateButtonEnabled = true;
+            mProgressDialog.dismiss();
+        }
+    }
 
     public ListView getLvMain() {
         return mLvMain;

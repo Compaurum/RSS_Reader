@@ -55,11 +55,8 @@ public class MyDBTools implements Constants {
     }
 
     public void insert(Item item){
-        if (isExist(item)){
-            Log.d("DATABASE", "Already exist");
-            return;
-        }
-        Log.d("DATABASE", "Inserted");
+        if (isExist(item)) return;
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(Fields.title.name(), item.getTitle());
         contentValues.put(Fields.link.name(), item.getLink());
