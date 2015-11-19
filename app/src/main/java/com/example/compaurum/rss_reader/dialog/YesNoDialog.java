@@ -1,24 +1,22 @@
 package com.example.compaurum.rss_reader.dialog;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.widget.Button;
 
 import com.example.compaurum.rss_reader.MainActivity;
 import com.example.compaurum.rss_reader.R;
 
 public class YesNoDialog {
-    AlertDialog.Builder adb;
-    Context context;
-    int position;
-    int dialogType;
+    private AlertDialog.Builder adb;
+    private Context mContext;
+    private int position;
+    private int dialogType;
 
     public YesNoDialog(Context context, int dialogType, int position) {
         this.dialogType = dialogType;
         if (dialogType == YesNoDialogListener.YES_NO_DIALOG_DELETE_ITEM) {
-            this.context = (MainActivity) context;
+            this.mContext = (MainActivity) context;
             this.position = position;
             adb = new AlertDialog.Builder(context);
             adb.setTitle(R.string.delete)
@@ -33,7 +31,7 @@ public class YesNoDialog {
     public YesNoDialog(Context context, int dialogType){
         this.dialogType = dialogType;
         if (dialogType == YesNoDialogListener.YES_NO_DIALOG_DELETE_ALL) {
-            this.context = (MainActivity) context;
+            this.mContext = (MainActivity) context;
             adb = new AlertDialog.Builder(context);
             adb.setTitle(R.string.delete)
                     .setMessage(R.string.questionDeleteAll)
@@ -50,7 +48,7 @@ public class YesNoDialog {
 
     DialogInterface.OnClickListener answerListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
-            ((YesNoDialogListener) context).onYesNoDialogClicked(dialogType, which, position);
+            ((YesNoDialogListener) mContext).onYesNoDialogClicked(dialogType, which, position);
         }
     };
 

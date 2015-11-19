@@ -18,11 +18,9 @@ import java.util.concurrent.TimeoutException;
 public class Downloader {
 
     private String mUrlString;
-    InputStream urlInputStream;
-    String fullText = "";
+    private InputStream mUrlInputStream;
+    private String mFullText = "";
     private UpdateRss mUpdateRss = null;
-    private long total = 0;
-    private long length = 0;
 
     public Downloader(UpdateRss updateRss) {
         this.mUpdateRss = updateRss;
@@ -42,26 +40,17 @@ public class Downloader {
         //_setProxy(); // Set the proxy if needed
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            urlInputStream = conn.getInputStream();
+            mUrlInputStream = conn.getInputStream();
         }
 
-        char[] chars = new char[512];
+        char[] chars = new char[8192];
         int k;
-        length = conn.getContentLength();
-        //urlInputStream.read(buffer);
-        InputStreamReader inputStreamReader = new InputStreamReader(urlInputStream, "cp1251");
+        InputStreamReader inputStreamReader = new InputStreamReader(mUrlInputStream, "cp1251");
         while ((k = inputStreamReader.read(chars)) > 0) {
-            //System.out.println(k);
-            fullText += new String(chars, 0, k);
-            total += k;
+            mFullText += new String(chars, 0, k);
         }
 
-        if (urlInputStream != null) urlInputStream.close();
-        return fullText;
+        if (mUrlInputStream != null) mUrlInputStream.close();
+        return mFullText;
     }
-
-//    private void publishProgress(int what) {
-//        mUpdateRss.messageToHandler(what);
-//    }
-
 }

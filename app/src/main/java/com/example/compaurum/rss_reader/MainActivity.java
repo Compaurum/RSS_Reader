@@ -3,8 +3,8 @@ package com.example.compaurum.rss_reader;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,14 +13,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.compaurum.rss_reader.DBHelper.DBHelper;
 import com.example.compaurum.rss_reader.DBHelper.MyDBTools;
-import com.example.compaurum.rss_reader.constants.Constants;
 import com.example.compaurum.rss_reader.adapter.ListAdapter;
+import com.example.compaurum.rss_reader.constants.Constants;
 import com.example.compaurum.rss_reader.dialog.YesNoDialog;
 import com.example.compaurum.rss_reader.dialog.YesNoDialogListener;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
-import com.example.compaurum.rss_reader.DBHelper.DBHelper;
 
 
 public class MainActivity extends ActionBarActivity implements Constants, YesNoDialogListener {
@@ -29,7 +29,6 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     private boolean mFavorite = false;
     private TextView mProccess;
     private ListView mLvMain;
-    private TextView channelTitle;
     private ListAdapter mAdapter;
     private boolean mUpdateButtonEnabled = true;
     private ProgressDialog mProgressDialog;
@@ -42,7 +41,6 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
 
         mLvMain = (ListView) findViewById(android.R.id.list);
         mProccess = (TextView) findViewById(R.id.proccess);
-        channelTitle = (TextView) findViewById(R.id.channelTitle);
         mAdapter = new ListAdapter(this, mFeeds);
         mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mLvMain.setAdapter(mAdapter);
@@ -217,7 +215,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
                 }
                 break;
             case YES_NO_DIALOG_DELETE_ALL:
-                if (result == Dialog.BUTTON_POSITIVE){
+                if (result == Dialog.BUTTON_POSITIVE) {
                     deleteAll();
                 }
         }

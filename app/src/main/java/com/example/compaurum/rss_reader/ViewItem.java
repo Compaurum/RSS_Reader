@@ -1,8 +1,7 @@
 package com.example.compaurum.rss_reader;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -10,23 +9,17 @@ import android.webkit.WebView;
 
 public class ViewItem extends ActionBarActivity {
 
-    private String mFullText;
-    private String mLink;
-    private String mDate;
-    private String mFullPage;
-    WebView mWebView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_item);
 
-        this.mFullText = getIntent().getStringExtra("fullText");
-        this.mLink = getIntent().getStringExtra("link");
-        this.mDate = getIntent().getStringExtra("date");
-        this.mFullPage = paragraph(mFullText) + paragraph(link(mLink)) + paragraph(mDate);
-        this.mFullPage = mFullPage.replaceAll("&nbsp;", "</p><p>");
-        mWebView = (WebView) findViewById(R.id.webView);
-        mWebView.loadDataWithBaseURL(null, mFullPage, "text/html", "en_US", null);
+        String fullText = getIntent().getStringExtra("fullText");
+        String link = getIntent().getStringExtra("link");
+        String date = getIntent().getStringExtra("date");
+        String fullPage = paragraph(fullText) + paragraph(link(link)) + paragraph(date);
+        fullPage = fullPage.replaceAll("&nbsp;", "</p><p>");
+         ((WebView) findViewById(R.id.webView)).loadDataWithBaseURL(null, fullPage, "text/html", "en_US", null);
     }
 
     @Override

@@ -21,7 +21,6 @@ public class UpdateRss extends AsyncTask implements Constants {
     private ListView mLvMain;
     private ArrayAdapter<String> mAdapter;
     private String mLink = "http://www.telegraf.in.ua/rss.xml";
-    private Channel mChannel = null;
     private MainActivity mContext;
 
     public UpdateRss(Context context, ListView lvMain) {
@@ -71,7 +70,7 @@ public class UpdateRss extends AsyncTask implements Constants {
         }catch (Exception e){
             Log.d("ERROR", e.getMessage());
         }
-        mChannel = rp.getFeed();
+        Channel mChannel = rp.getFeed();
 
         return mChannel;
     }
