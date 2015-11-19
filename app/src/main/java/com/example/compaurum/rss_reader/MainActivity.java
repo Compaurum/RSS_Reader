@@ -40,7 +40,6 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         setContentView(R.layout.activity_main);
 
         mLvMain = (ListView) findViewById(android.R.id.list);
-        mProccess = (TextView) findViewById(R.id.proccess);
         mAdapter = new ListAdapter(this, mFeeds);
         mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mLvMain.setAdapter(mAdapter);
