@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.compaurum.rss_reader.Interfaces.Constants;
+import com.example.compaurum.rss_reader.constants.Constants;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
 
@@ -50,7 +50,7 @@ public class MyDBTools implements Constants {
         };
         ContentValues contentValues = new ContentValues();
         contentValues.put(Fields.favorite.name(), item.isFavorite());
-
+        contentValues.put(Fields.readed.name(), item.isReaded());
         db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
     }
 
@@ -62,6 +62,7 @@ public class MyDBTools implements Constants {
         contentValues.put(Fields.link.name(), item.getLink());
         contentValues.put(Fields.fulltext.name(), item.getFullText());
         contentValues.put(Fields.favorite.name(), item.isFavorite());
+        contentValues.put(Fields.readed.name(), item.isReaded());
         contentValues.put(Fields.date.name(), item.getMpubDate().getTime());
         db.insertOrThrow(TABLE_NAME, null, contentValues);
     }
@@ -70,10 +71,18 @@ public class MyDBTools implements Constants {
         db.delete(TABLE_NAME, null, null);
     }
 
-    public Items selectAll(){
+    public Items selectAll(boolean favorite){
         Items items = null;
-        String orderBy = Fields.date.name() + " desc ";
-        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, orderBy);
+        String orderBy = Fields.readed.name() + ", " + Fields.date.name() + " desc ";
+        String selection = null;
+        String[] selection_args = null;
+        if (favorite){
+            selection = Fields.favorite.name() + " = ? ";
+            selection_args = new String[]{
+                    "1"
+            };
+        }
+        Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, orderBy);
         try {
             if (cursor.moveToFirst()) {
                 items = new Items();
@@ -82,7 +91,8 @@ public class MyDBTools implements Constants {
                     item.setTitle(cursor.getString(Fields.title.ordinal()));
                     item.setLink(cursor.getString(Fields.link.ordinal()));
                     item.setFullText(cursor.getString(Fields.fulltext.ordinal()));
-                    item.setFavorite(cursor.getInt(Fields.favorite.ordinal()) == 1 ? true : false);
+                    item.setFavorite(cursor.getInt(Fields.favorite.ordinal()) == 1);
+                    item.setReaded(cursor.getInt(Fields.readed.ordinal()) == 1);
                     item.setMpubDate(cursor.getLong(Fields.date.ordinal()));
                     items.add(item);
                 } while (cursor.moveToNext());

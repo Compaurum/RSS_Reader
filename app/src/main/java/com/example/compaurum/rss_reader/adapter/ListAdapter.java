@@ -2,6 +2,7 @@ package com.example.compaurum.rss_reader.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,11 +53,9 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //Log.d("GETVIEW", "STARTED" + layoutInflater);
         View view;
         ViewHolder holder;
         if (convertView == null) {
-            //Log.d("GETVIEW_Listener", "NULL VIEW ");
             view = layoutInflater.inflate(R.layout.list_item, parent, false);
             holder = new ViewHolder();
             holder.label = (TextView) view.findViewById(R.id.label);
@@ -71,11 +70,17 @@ public class ListAdapter extends BaseAdapter {
         Item item = objects.get(position);
         holder.label.setText(item.getTitle());
         holder.comment.setText(item.getpubDateString());
+        if (!item.isReaded()) {
+            holder.label.setTextColor(Color.BLACK);
+            holder.comment.setTextColor(Color.BLACK);
+        }else {
+            holder.label.setTextColor(Color.GRAY);
+            holder.comment.setTextColor(Color.GRAY);
+        }
         //holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(item.isFavorite());
         //OnCheckedChangeListener(mOnCheckedChangeListener);
         holder.checkBox.setTag(item);
-        Log.d("GETVIEW", "" + item.isFavorite());
         holder.checkBox.setOnClickListener(mClickListener);
 
 

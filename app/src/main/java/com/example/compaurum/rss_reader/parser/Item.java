@@ -15,6 +15,7 @@ public class Item implements Serializable{
     private String mpubDateString;
     private String mFullText;
     private boolean mFavorite;
+    private boolean mReaded;
 
     public Item(){}
 
@@ -100,6 +101,13 @@ public class Item implements Serializable{
         mFavorite = favorite;
     }
 
+    public boolean isReaded() {
+        return mReaded;
+    }
+
+    public void setReaded(boolean readed) {
+        mReaded = readed;
+    }
    /* @Override
     public String toString()
     {

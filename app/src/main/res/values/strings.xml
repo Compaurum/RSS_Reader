@@ -9,4 +9,10 @@
     <string name="lookOnWebSite">Посмотреть на сайте</string>
     <string name="Update_news">Update news</string>
     <string name="Clear">Clear</string>
+    <string name="Favorite">Favorite</string>
+    <string name="delete">Удаление</string>
+    <string name="questionDelete">Удалить новость?</string>
+    <string name="questionDeleteAll">Удалить все новости?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

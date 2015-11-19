@@ -46,10 +46,8 @@ public class RssParser extends DefaultHandler {
             System.out.println("Exception in RssParser.java");
             e.printStackTrace();
         } finally {
-            try {
-                if (urlInputStream != null) urlInputStream.close();
-            } catch (Exception e) {
-            }
+            spf = null;
+            sp = null;
         }
     }
 

@@ -1,41 +1,36 @@
 package com.example.compaurum.rss_reader;
 
-import android.app.ActionBar;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.compaurum.rss_reader.DBHelper.MyDBTools;
-import com.example.compaurum.rss_reader.Interfaces.Constants;
+import com.example.compaurum.rss_reader.constants.Constants;
 import com.example.compaurum.rss_reader.adapter.ListAdapter;
-import com.example.compaurum.rss_reader.parser.Channel;
+import com.example.compaurum.rss_reader.dialog.YesNoDialog;
+import com.example.compaurum.rss_reader.dialog.YesNoDialogListener;
 import com.example.compaurum.rss_reader.parser.Item;
 import com.example.compaurum.rss_reader.parser.Items;
 import com.example.compaurum.rss_reader.DBHelper.DBHelper;
 
-import java.util.ArrayList;
 
-
-public class MainActivity extends ActionBarActivity implements Constants{
+public class MainActivity extends ActionBarActivity implements Constants, YesNoDialogListener {
 
     private Items mFeeds = new Items();
-    private CheckBox mFavorite;
+    private boolean mFavorite = false;
     private TextView mProccess;
     private ListView mLvMain;
     private TextView channelTitle;
     private ListAdapter mAdapter;
-    Handler handler = null;
     private boolean mUpdateButtonEnabled = true;
     private ProgressDialog mProgressDialog;
     private DBHelper mDBHelper;
@@ -47,36 +42,25 @@ public class MainActivity extends ActionBarActivity implements Constants{
 
         mLvMain = (ListView) findViewById(android.R.id.list);
         mProccess = (TextView) findViewById(R.id.proccess);
-        mFavorite = (CheckBox) findViewById(R.id.checkBox1);
         channelTitle = (TextView) findViewById(R.id.channelTitle);
-        //mAdapter = new ArrayAdapter<>(this, R.layout.list_item, R.id.label, mFeeds);
         mAdapter = new ListAdapter(this, mFeeds);
-        //mAdapter = new ArrayAdapter(this, R.layout.list_item, mNames);
         mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mLvMain.setAdapter(mAdapter);
+        mLvMain.setOnItemClickListener(mOnItemClickListener);
+        mLvMain.setOnItemLongClickListener(mOnItemLongClickListener);
 
-        mLvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), ViewItem.class);
-                intent.putExtra("fullText", ((Item) mFeeds.get(position)).getFullText());
-                intent.putExtra("link", ((Item) mFeeds.get(position)).getLink());
-                intent.putExtra("date", ((Item) mFeeds.get(position)).getpubDateString());
-                startActivity(intent);
-                //Log.d("LOG_TAG", "itemClick: position = " + position + ", id = " + id);
-                //Log.d("LOG_TAG", "date " + ((Item) mFeeds.get(position)).getMpubDate());
+        loadFromBase(null, mFavorite);
+    }
 
-            }
-        });
-
-        mLvMain.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                delete(mFeeds.get(position));
-                return true;
-            }
-        });
-        loadFromBase(null);
+    @Override
+    protected Dialog onCreateDialog(int id, Bundle args) {
+        switch (id) {
+            case YES_NO_DIALOG_DELETE_ITEM:
+                return new YesNoDialog(this, id, args.getInt("position")).create();
+            case YES_NO_DIALOG_DELETE_ALL:
+                return new YesNoDialog(this, id).create();
+        }
+        return super.onCreateDialog(id);
     }
 
     @Override
@@ -92,31 +76,63 @@ public class MainActivity extends ActionBarActivity implements Constants{
         return super.onPrepareOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings){
-            return true;
-        } else if (id == R.id.update){
-            new UpdateRss(this, mLvMain).update();
-        } else if (id == R.id.clear){
-            deleteAll();
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.update:
+                new UpdateRss(this, mLvMain).update();
+                break;
+            case R.id.favorite:
+                mFavorite = !mFavorite;
+                if (mFavorite) {
+                    item.setIcon(R.drawable.ic_check_circle_black_whitecircle_36dp);
+                } else {
+                    item.setIcon(R.drawable.ic_check_circle_white_36dp);
+                }
+                loadFromBase(null, mFavorite);
+                break;
+            case R.id.clear:
+                showDialog(YES_NO_DIALOG_DELETE_ALL);
+                break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    AdapterView.OnItemLongClickListener mOnItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            showDialog(YES_NO_DIALOG_DELETE_ITEM, bundle);
+            return true;
+        }
+    };
+
+    AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View view,
+                                int position, long id) {
+            Intent intent = new Intent(getApplicationContext(), ViewItem.class);
+            mFeeds.get(position).setReaded(true);
+            update(mFeeds.get(position));
+            updateListView();
+            intent.putExtra("fullText", (mFeeds.get(position)).getFullText());
+            intent.putExtra("link", (mFeeds.get(position)).getLink());
+            intent.putExtra("date", (mFeeds.get(position)).getpubDateString());
+            startActivity(intent);
+        }
+    };
+
     public TextView getProccess() {
         return mProccess;
     }
 
-    public void setProgressDialog(boolean bool){
+    public void setProgressDialog(boolean bool) {
         if (bool) {
             mProccess.setText("Started");
             mUpdateButtonEnabled = false;
@@ -126,7 +142,7 @@ public class MainActivity extends ActionBarActivity implements Constants{
             mProgressDialog.setMessage("Downloading news");
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();
-        }else{
+        } else {
             mProccess.setText("Ended");
             mUpdateButtonEnabled = true;
             mProgressDialog.dismiss();
@@ -137,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements Constants{
         return mLvMain;
     }
 
-    public ArrayList getFeeds() {
+    public Items getFeeds() {
         return mFeeds;
     }
 
@@ -145,50 +161,70 @@ public class MainActivity extends ActionBarActivity implements Constants{
         return mAdapter;
     }
 
-    public Handler getHandler() {
-        return handler;
-    }
 
-    public void updateList(Items list) {
+    public void update(Items list) {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.insert(list);
-        loadFromBase(myDBTools);
+        loadFromBase(myDBTools, mFavorite);
     }
 
-    public void updateListView(){
+    public void updateListView() {
         mAdapter.notifyDataSetChanged();
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.deleteAll();
         mFeeds.clear();
         updateListView();
     }
 
-    public void delete(Item item){
+    public void delete(Item item) {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.delete(item);
         mFeeds.remove(item);
         updateListView();
     }
 
-    public void update(Item item){
+    public void update(Item item) {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.update(item);
     }
 
-    public void loadFromBase(MyDBTools tools){
-        MyDBTools myDBTools ;
-        if (tools == null){
+    public void loadFromBase(MyDBTools tools, boolean favorite) {
+        MyDBTools myDBTools;
+        if (tools == null) {
             myDBTools = new MyDBTools(new DBHelper(this));
-        }else myDBTools = tools;
+        } else myDBTools = tools;
 
-        Items items = myDBTools.selectAll();
+        Items items = myDBTools.selectAll(favorite);
         if (items != null) {
             this.mFeeds.clear();
             this.mFeeds.addAll(items);
             updateListView();
+        } else {
+            this.mFeeds.clear();
+            Toast.makeText(this, "База новостей пуста! \n Обновите страницу ", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onYesNoDialogClicked(int dialogType, int result, int position) {
+        switch (dialogType) {
+            case YES_NO_DIALOG_DELETE_ITEM:
+                if (result == Dialog.BUTTON_POSITIVE) {
+                    delete(mFeeds.get(position));
+                }
+                break;
+            case YES_NO_DIALOG_DELETE_ALL:
+                if (result == Dialog.BUTTON_POSITIVE){
+                    deleteAll();
+                }
+        }
+    }
+
+    @Override
+    public void onYesNoDialogCancelled() {
+
     }
 }
