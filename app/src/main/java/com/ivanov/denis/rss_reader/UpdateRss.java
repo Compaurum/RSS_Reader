@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader;
+package com.ivanov.denis.rss_reader;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -9,10 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.compaurum.rss_reader.Downloader.Downloader;
-import com.example.compaurum.rss_reader.constants.Constants;
-import com.example.compaurum.rss_reader.parser.Channel;
-import com.example.compaurum.rss_reader.parser.RssParser;
+import com.ivanov.denis.rss_reader.Downloader.Downloader;
+import com.ivanov.denis.rss_reader.constants.Constants;
+import com.ivanov.denis.rss_reader.parser.Channel;
+import com.ivanov.denis.rss_reader.parser.RssParser;
 
 import java.io.IOException;
 
@@ -47,7 +47,6 @@ public class UpdateRss extends AsyncTask implements Constants {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mContext.getProccess().setText("Started");
         mContext.setProgressDialog(true);
     }
 

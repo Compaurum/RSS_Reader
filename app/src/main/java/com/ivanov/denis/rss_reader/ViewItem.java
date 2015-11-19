@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader;
+package com.ivanov.denis.rss_reader;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

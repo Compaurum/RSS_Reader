@@ -1,11 +1,11 @@
-package com.example.compaurum.rss_reader.DBHelper;
+package com.ivanov.denis.rss_reader.DBHelper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.compaurum.rss_reader.constants.Constants;
+import com.ivanov.denis.rss_reader.constants.Constants;
 
 public class DBHelper extends SQLiteOpenHelper implements Constants {
 

@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader.adapter;
+package com.ivanov.denis.rss_reader.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,9 +10,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.example.compaurum.rss_reader.MainActivity;
-import com.example.compaurum.rss_reader.R;
-import com.example.compaurum.rss_reader.parser.Item;
+import com.ivanov.denis.rss_reader.MainActivity;
+import com.ivanov.denis.rss_reader.R;
+import com.ivanov.denis.rss_reader.parser.Item;
 
 import java.util.ArrayList;
 

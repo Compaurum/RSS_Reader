@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader.constants;
+package com.ivanov.denis.rss_reader.constants;
 
 public interface Constants {
 

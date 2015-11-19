@@ -1,20 +1,15 @@
-package com.example.compaurum.rss_reader.parser;
+package com.ivanov.denis.rss_reader.parser;
 
 import android.util.Log;
 
-import com.example.compaurum.rss_reader.Downloader.Downloader;
+import com.ivanov.denis.rss_reader.Downloader.Downloader;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class Using_Rss {
 

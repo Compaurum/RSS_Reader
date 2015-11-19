@@ -1,18 +1,12 @@
-package com.example.compaurum.rss_reader.Downloader;
+package com.ivanov.denis.rss_reader.Downloader;
 
-import android.app.ProgressDialog;
-import android.util.Log;
-
-import com.example.compaurum.rss_reader.MainActivity;
-import com.example.compaurum.rss_reader.UpdateRss;
+import com.ivanov.denis.rss_reader.UpdateRss;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.SocketException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.concurrent.TimeoutException;
 
 public class Downloader {

@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader;
+package com.ivanov.denis.rss_reader;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

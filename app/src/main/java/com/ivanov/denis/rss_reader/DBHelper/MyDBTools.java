@@ -1,13 +1,13 @@
-package com.example.compaurum.rss_reader.DBHelper;
+package com.ivanov.denis.rss_reader.DBHelper;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.compaurum.rss_reader.constants.Constants;
-import com.example.compaurum.rss_reader.parser.Item;
-import com.example.compaurum.rss_reader.parser.Items;
+import com.ivanov.denis.rss_reader.constants.Constants;
+import com.ivanov.denis.rss_reader.parser.Item;
+import com.ivanov.denis.rss_reader.parser.Items;
 
 public class MyDBTools implements Constants {
     private SQLiteDatabase db;

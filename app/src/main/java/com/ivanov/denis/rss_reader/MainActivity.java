@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader;
+package com.ivanov.denis.rss_reader;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -13,21 +13,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.compaurum.rss_reader.DBHelper.DBHelper;
-import com.example.compaurum.rss_reader.DBHelper.MyDBTools;
-import com.example.compaurum.rss_reader.adapter.ListAdapter;
-import com.example.compaurum.rss_reader.constants.Constants;
-import com.example.compaurum.rss_reader.dialog.YesNoDialog;
-import com.example.compaurum.rss_reader.dialog.YesNoDialogListener;
-import com.example.compaurum.rss_reader.parser.Item;
-import com.example.compaurum.rss_reader.parser.Items;
+import com.ivanov.denis.rss_reader.DBHelper.DBHelper;
+import com.ivanov.denis.rss_reader.DBHelper.MyDBTools;
+import com.ivanov.denis.rss_reader.adapter.ListAdapter;
+import com.ivanov.denis.rss_reader.constants.Constants;
+import com.ivanov.denis.rss_reader.dialog.YesNoDialog;
+import com.ivanov.denis.rss_reader.dialog.YesNoDialogListener;
+import com.ivanov.denis.rss_reader.parser.Item;
+import com.ivanov.denis.rss_reader.parser.Items;
 
 
 public class MainActivity extends ActionBarActivity implements Constants, YesNoDialogListener {
 
     private Items mFeeds = new Items();
     private boolean mFavorite = false;
-    private TextView mProccess;
     private ListView mLvMain;
     private ListAdapter mAdapter;
     private boolean mUpdateButtonEnabled = true;
@@ -125,13 +124,8 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         }
     };
 
-    public TextView getProccess() {
-        return mProccess;
-    }
-
     public void setProgressDialog(boolean bool) {
         if (bool) {
-            mProccess.setText("Started");
             mUpdateButtonEnabled = false;
             mProgressDialog = new ProgressDialog(MainActivity.this);
             mProgressDialog.setIndeterminate(true);
@@ -140,7 +134,6 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();
         } else {
-            mProccess.setText("Ended");
             mUpdateButtonEnabled = true;
             mProgressDialog.dismiss();
         }

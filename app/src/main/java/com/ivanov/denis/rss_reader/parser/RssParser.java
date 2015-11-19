@@ -1,6 +1,4 @@
-package com.example.compaurum.rss_reader.parser;
-
-import com.example.compaurum.rss_reader.Downloader.Downloader;
+package com.ivanov.denis.rss_reader.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

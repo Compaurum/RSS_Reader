@@ -1,4 +1,4 @@
-package com.example.compaurum.rss_reader.parser;
+package com.ivanov.denis.rss_reader.parser;
 
 import java.io.Serializable;
 import java.text.ParseException;

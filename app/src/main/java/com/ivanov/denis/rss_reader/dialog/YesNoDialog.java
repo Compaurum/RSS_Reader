@@ -1,11 +1,11 @@
-package com.example.compaurum.rss_reader.dialog;
+package com.ivanov.denis.rss_reader.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-import com.example.compaurum.rss_reader.MainActivity;
-import com.example.compaurum.rss_reader.R;
+import com.ivanov.denis.rss_reader.MainActivity;
+import com.ivanov.denis.rss_reader.R;
 
 public class YesNoDialog {
     private AlertDialog.Builder adb;
