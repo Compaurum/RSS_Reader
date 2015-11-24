@@ -3,12 +3,14 @@ package com.ivanov.denis.rss_reader.constants;
 public interface Constants {
 
     enum Fields {id, title, link, fulltext, favorite, date, readed}
-    final static String LOG_TAG = "MyLogs";
-    final static String TABLE_NAME = "feeds";
+    String LOG_TAG = "MyLogs";
+    String TABLE_NAME = "feeds";
+    String BROADCAST_ACTION = "com.package com.ivanov.denis.rss_reader";
 
-    public final static int ERROR_DOWNLOADING = 0;
-    public final static int START_DOWNLOADING = 1;
-    public final static int DOWNLOADING = 2;
-    public final static int END_DOWNLOADING = 3;
+    String STATUS_DOWNLOADING = "STATUS_DOWNLOADING";
+    int ERROR_DOWNLOADING = 0;
+    int START_DOWNLOADING = 1;
+    int DOWNLOADING = 2;
+    int END_DOWNLOADING = 3;
 
 }

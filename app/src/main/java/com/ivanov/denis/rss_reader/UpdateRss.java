@@ -15,22 +15,21 @@ import com.ivanov.denis.rss_reader.parser.Channel;
 import com.ivanov.denis.rss_reader.parser.RssParser;
 
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 public class UpdateRss extends AsyncTask implements Constants {
 
-    private ListView mLvMain;
     private ArrayAdapter<String> mAdapter;
     private String mLink = "http://www.telegraf.in.ua/rss.xml";
     private MainActivity mContext;
 
-    public UpdateRss(Context context, ListView lvMain) {
-        this.mLvMain = lvMain;
+    public UpdateRss(Context context) {
         this.mContext = (MainActivity)context;
     }
 
     public void update() {
         if (!isInternet()) {
-            Toast.makeText(mContext, "Turn on Internet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Turn on Internet", Toast.LENGTH_SHORT).show();
             return;
         }
         this.execute();
@@ -59,19 +58,17 @@ public class UpdateRss extends AsyncTask implements Constants {
 
     @Override
     protected Object doInBackground(Object[] params) {
-        String fullText = null;
+        String fullText;
         RssParser rp = new RssParser();
         try {
-            fullText = (new Downloader(UpdateRss.this)).download(mLink);
+            fullText = (new Downloader()).download(mLink);
             rp.parse(fullText);
         } catch (IOException e) {
             Log.d("ERROR", e.getMessage());
-        }catch (Exception e){
+        } catch (TimeoutException e) {
             Log.d("ERROR", e.getMessage());
         }
-        Channel mChannel = rp.getFeed();
-
-        return mChannel;
+        return rp.getFeed();
     }
 
     @Override

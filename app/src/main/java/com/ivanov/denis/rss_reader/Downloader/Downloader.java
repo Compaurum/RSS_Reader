@@ -1,7 +1,5 @@
 package com.ivanov.denis.rss_reader.Downloader;
 
-import com.ivanov.denis.rss_reader.UpdateRss;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,11 +12,7 @@ public class Downloader {
     private String mUrlString;
     private InputStream mUrlInputStream;
     private String mFullText = "";
-    private UpdateRss mUpdateRss = null;
 
-    public Downloader(UpdateRss updateRss) {
-        this.mUpdateRss = updateRss;
-    }
     public Downloader() {}
 
     public String download(String url) throws NullPointerException, IOException, TimeoutException {

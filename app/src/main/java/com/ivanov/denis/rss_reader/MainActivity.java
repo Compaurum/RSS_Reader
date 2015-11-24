@@ -2,15 +2,17 @@ package com.ivanov.denis.rss_reader;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ivanov.denis.rss_reader.DBHelper.DBHelper;
@@ -21,6 +23,7 @@ import com.ivanov.denis.rss_reader.dialog.YesNoDialog;
 import com.ivanov.denis.rss_reader.dialog.YesNoDialogListener;
 import com.ivanov.denis.rss_reader.parser.Item;
 import com.ivanov.denis.rss_reader.parser.Items;
+import com.ivanov.denis.rss_reader.service.RSSReaderService;
 
 
 public class MainActivity extends ActionBarActivity implements Constants, YesNoDialogListener {
@@ -32,10 +35,12 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     private boolean mUpdateButtonEnabled = true;
     private ProgressDialog mProgressDialog;
     private DBHelper mDBHelper;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("MAINACTIVITY", "ONCREATE");
         setContentView(R.layout.activity_main);
 
         mLvMain = (ListView) findViewById(android.R.id.list);
@@ -44,8 +49,19 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         mLvMain.setAdapter(mAdapter);
         mLvMain.setOnItemClickListener(mOnItemClickListener);
         mLvMain.setOnItemLongClickListener(mOnItemLongClickListener);
-
+        mReceiver = new Receiver(this);
+        registerReceiver(mReceiver, new IntentFilter(BROADCAST_ACTION));
         loadFromBase(null, mFavorite);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("MAINACTIVITY", "ONDestroy");
+        unregisterReceiver(mReceiver);
+        if (mProgressDialog != null) mProgressDialog.dismiss();
+        Log.d("MAINACTIVITY", "ONDestroy");
+        super.onDestroy();
     }
 
     @Override
@@ -79,7 +95,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
             case R.id.action_settings:
                 return true;
             case R.id.update:
-                new UpdateRss(this, mLvMain).update();
+                ///need to write
                 break;
             case R.id.favorite:
                 mFavorite = !mFavorite;
@@ -185,17 +201,18 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         MyDBTools myDBTools;
         if (tools == null) {
             myDBTools = new MyDBTools(new DBHelper(this));
-        } else myDBTools = tools;
+        } else {
+            myDBTools = tools;
+        }
 
         Items items = myDBTools.selectAll(favorite);
+        this.mFeeds.clear();
         if (items != null) {
-            this.mFeeds.clear();
             this.mFeeds.addAll(items);
-            updateListView();
         } else {
-            this.mFeeds.clear();
             Toast.makeText(this, "База новостей пуста! \n Обновите страницу ", Toast.LENGTH_SHORT).show();
         }
+        updateListView();
     }
 
     @Override
@@ -216,5 +233,14 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     @Override
     public void onYesNoDialogCancelled() {
 
+    }
+
+    public void startService(View view) {
+        Intent intent = new Intent(this, RSSReaderService.class).putExtra("test", "sended to Service");
+        startService(intent);
+    }
+
+    public void stopService(View view) {
+        stopService(new Intent(this, RSSReaderService.class));
     }
 }

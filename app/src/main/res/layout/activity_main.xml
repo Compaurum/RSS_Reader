@@ -16,6 +16,14 @@
         android:contentDescription="@string/app_name"
         android:visibility="visible"
         android:layout_marginBottom="5pt"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="startService"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stopService"/>
 
     <ListView
         android:id="@android:id/list"
