@@ -45,14 +45,13 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
 
         mLvMain = (ListView) findViewById(android.R.id.list);
         mAdapter = new ListAdapter(this, mFeeds);
-        mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        //mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mLvMain.setAdapter(mAdapter);
         mLvMain.setOnItemClickListener(mOnItemClickListener);
         mLvMain.setOnItemLongClickListener(mOnItemLongClickListener);
         mReceiver = new Receiver(this);
         registerReceiver(mReceiver, new IntentFilter(BROADCAST_ACTION));
         loadFromBase(null, mFavorite);
-
     }
 
     @Override
@@ -95,7 +94,8 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
             case R.id.action_settings:
                 return true;
             case R.id.update:
-                ///need to write
+                Intent intent = new Intent(this, RSSReaderService.class);
+                startService(intent);
                 break;
             case R.id.favorite:
                 mFavorite = !mFavorite;
@@ -154,19 +154,6 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
             mProgressDialog.dismiss();
         }
     }
-
-    public ListView getLvMain() {
-        return mLvMain;
-    }
-
-    public Items getFeeds() {
-        return mFeeds;
-    }
-
-    public ListAdapter getAdapter() {
-        return mAdapter;
-    }
-
 
     public void update(Items list) {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
@@ -233,11 +220,6 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     @Override
     public void onYesNoDialogCancelled() {
 
-    }
-
-    public void startService(View view) {
-        Intent intent = new Intent(this, RSSReaderService.class).putExtra("test", "sended to Service");
-        startService(intent);
     }
 
     public void stopService(View view) {

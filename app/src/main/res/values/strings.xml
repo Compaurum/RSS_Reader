@@ -15,4 +15,7 @@
     <string name="questionDeleteAll">Удалить все новости?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="added_news">Добавлены новости</string>
+    <string name="Telegraph">Телеграф</string>
+    <string name="unread_news">" непрочитанных новостей"</string>
 </resources>

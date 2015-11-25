@@ -17,6 +17,7 @@ import com.ivanov.denis.rss_reader.constants.Constants;
 import com.ivanov.denis.rss_reader.parser.Channel;
 import com.ivanov.denis.rss_reader.parser.Items;
 import com.ivanov.denis.rss_reader.parser.RssParser;
+import com.ivanov.denis.rss_reader.service.RSSReaderService;
 
 import java.io.IOException;
 
@@ -61,6 +62,7 @@ public class UpdateRssService extends AsyncTask implements Constants {
         Intent intent = new Intent(BROADCAST_ACTION);
         intent.putExtra(STATUS_DOWNLOADING, END_DOWNLOADING);
         mService.sendBroadcast(intent);
+        ((RSSReaderService)mService).sendNotif();
         super.onPostExecute(o);
     }
 

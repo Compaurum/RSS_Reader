@@ -71,6 +71,15 @@ public class MyDBTools implements Constants {
         db.delete(TABLE_NAME, null, null);
     }
 
+    public int countUnreadNews(){
+        String selection = Fields.readed.name() + " = ? ";
+        String[] selection_args = new String[]{
+                "0"
+        };
+        Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, null);
+        return cursor.getColumnCount();
+    }
+
     public Items selectAll(boolean favorite){
         Items items = null;
         String orderBy = Fields.readed.name() + ", " + Fields.date.name() + " desc ";
