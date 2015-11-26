@@ -6,6 +6,7 @@ public interface Constants {
     String LOG_TAG = "MyLogs";
     String TABLE_NAME = "feeds";
     String BROADCAST_ACTION = "com.package com.ivanov.denis.rss_reader";
+    String FAVORITE = "FAVORITE";
 
     String STATUS_DOWNLOADING = "STATUS_DOWNLOADING";
     int ERROR_DOWNLOADING = 0;

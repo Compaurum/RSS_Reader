@@ -30,8 +30,11 @@ public class MyDBTools implements Constants {
                 item.getTitle()
         };
         int count;
-        try(Cursor cursor = db.query(TABLE_NAME, columns, selection, selection_args, null, null, null)){
+        Cursor cursor = db.query(TABLE_NAME, columns, selection, selection_args, null, null, null);
+        try{
             count = cursor.getCount();
+        }finally {
+            cursor.close();
         }
         return (count > 0);
     }
@@ -80,8 +83,11 @@ public class MyDBTools implements Constants {
                 "0"
         };
         int count;
-        try (Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, null)){
+        Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, null);
+        try {
             count = cursor.getCount();
+        }finally {
+            cursor.close();
         }
         return count;
     }
@@ -97,7 +103,8 @@ public class MyDBTools implements Constants {
                     "1"
             };
         }
-        try (Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, orderBy)) {
+        Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, orderBy);
+        try  {
             if (cursor.moveToFirst()) {
                 items = new Items();
                 do {
@@ -112,7 +119,13 @@ public class MyDBTools implements Constants {
                 } while (cursor.moveToNext());
             } else
                 Log.d(LOG_TAG, "0 rows");
+        }finally {
+            cursor.close();
         }
         return items;
+    }
+
+    public void close(){
+        db.close();
     }
 }

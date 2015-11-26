@@ -7,9 +7,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -43,6 +43,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     private BroadcastReceiver mReceiver;
     private ServiceConnection mServiceConnection;
     private boolean mBound = false;
+    private SharedPreferences mSharedPreferences;
     Intent rssReaderServiceIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +54,12 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         rssReaderServiceIntent = new Intent(this, RSSReaderService.class);
         mLvMain = (ListView) findViewById(android.R.id.list);
         mAdapter = new ListAdapter(this, mFeeds);
-        //mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mLvMain.setAdapter(mAdapter);
         mLvMain.setOnItemClickListener(mOnItemClickListener);
         mLvMain.setOnItemLongClickListener(mOnItemLongClickListener);
         mReceiver = new Receiver(this);
         registerReceiver(mReceiver, new IntentFilter(BROADCAST_ACTION));
+        loadPreferences();
         loadFromBase(null, mFavorite);
 
         mServiceConnection = new ServiceConnection() {
@@ -96,6 +97,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         unregisterReceiver(mReceiver);
         if (mProgressDialog != null) mProgressDialog.dismiss();
         Log.d("MAINACTIVITY", "ONDestroy");
+        savePreferences();
         super.onDestroy();
     }
 
@@ -198,6 +200,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.insert(list);
         loadFromBase(myDBTools, mFavorite);
+        myDBTools.close();
     }
 
     public void updateListView() {
@@ -207,6 +210,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     public void deleteAll() {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.deleteAll();
+        myDBTools.close();
         mFeeds.clear();
         updateListView();
     }
@@ -214,6 +218,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     public void delete(Item item) {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.delete(item);
+        myDBTools.close();
         mFeeds.remove(item);
         updateListView();
     }
@@ -221,6 +226,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     public void update(Item item) {
         MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
         myDBTools.update(item);
+        myDBTools.close();
     }
 
     public void loadFromBase(@Nullable MyDBTools tools, boolean favorite) {
@@ -232,6 +238,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         }
 
         Items items = myDBTools.selectAll(favorite);
+        myDBTools.close();
         this.mFeeds.clear();
         if (items != null) {
             this.mFeeds.addAll(items);
@@ -261,6 +268,17 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
 
     }
 
+    private void savePreferences(){
+        if (mSharedPreferences == null) mSharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(FAVORITE, mFavorite);
+        editor.apply();
+    }
+
+    private  void loadPreferences(){
+        mSharedPreferences = getPreferences(MODE_PRIVATE);
+        mFavorite = mSharedPreferences.getBoolean(FAVORITE, false);
+    }
     public void stopService(View view) {
         if (mBound) {
             unbindService(mServiceConnection);

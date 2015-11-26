@@ -61,6 +61,7 @@ public class UpdateRssService extends AsyncTask implements Constants {
         Items items = ((Channel) o).getItems();
         MyDBTools myDBTools = new MyDBTools(new DBHelper(mService));
         myDBTools.insert(items);
+        myDBTools.close();
         myDBTools = null;
 
         Intent intent = new Intent(BROADCAST_ACTION);
@@ -86,7 +87,7 @@ public class UpdateRssService extends AsyncTask implements Constants {
             Log.d("ERROR", e.getMessage());
         }
         Channel mChannel = rp.getFeed();
-
+        if (mChannel == null) cancel(true);
         return mChannel;
     }
 
