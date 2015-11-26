@@ -3,9 +3,14 @@ package com.ivanov.denis.rss_reader;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -36,13 +41,16 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     private ProgressDialog mProgressDialog;
     private DBHelper mDBHelper;
     private BroadcastReceiver mReceiver;
-
+    private ServiceConnection mServiceConnection;
+    private boolean mBound = false;
+    Intent rssReaderServiceIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("MAINACTIVITY", "ONCREATE");
         setContentView(R.layout.activity_main);
 
+        rssReaderServiceIntent = new Intent(this, RSSReaderService.class);
         mLvMain = (ListView) findViewById(android.R.id.list);
         mAdapter = new ListAdapter(this, mFeeds);
         //mLvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -52,6 +60,34 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         mReceiver = new Receiver(this);
         registerReceiver(mReceiver, new IntentFilter(BROADCAST_ACTION));
         loadFromBase(null, mFavorite);
+
+        mServiceConnection = new ServiceConnection() {
+            public void onServiceConnected(ComponentName name, IBinder binder) {
+                Log.d(LOG_TAG, "MainActivity onServiceConnected");
+                ((RSSReaderService.ServiceBinder)binder).cancelNotification();
+                mBound = true;
+            }
+
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d(LOG_TAG, "MainActivity onServiceDisconnected");
+                mBound = false;
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bindService(rssReaderServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+     protected void onStop() {
+        if (mBound) {
+            unbindService(mServiceConnection);
+            mBound = false;
+        }
+        super.onStop();
     }
 
     @Override
@@ -94,8 +130,11 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
             case R.id.action_settings:
                 return true;
             case R.id.update:
-                Intent intent = new Intent(this, RSSReaderService.class);
-                startService(intent);
+                if (UpdateRssService.isInternet(this)) {
+                    startService(rssReaderServiceIntent);
+                }else {
+                    Toast.makeText(this, R.string.turn_on_internet, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.favorite:
                 mFavorite = !mFavorite;
@@ -184,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         myDBTools.update(item);
     }
 
-    public void loadFromBase(MyDBTools tools, boolean favorite) {
+    public void loadFromBase(@Nullable MyDBTools tools, boolean favorite) {
         MyDBTools myDBTools;
         if (tools == null) {
             myDBTools = new MyDBTools(new DBHelper(this));
@@ -223,6 +262,10 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     }
 
     public void stopService(View view) {
+        if (mBound) {
+            unbindService(mServiceConnection);
+            mBound = false;
+        }
         stopService(new Intent(this, RSSReaderService.class));
     }
 }

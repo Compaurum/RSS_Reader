@@ -38,8 +38,12 @@ public class UpdateRssService extends AsyncTask implements Constants {
     }
 
     public boolean isInternet() {
+        return isInternet(mService);
+    }
+
+    public static boolean isInternet(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager)
-                mService.getSystemService(Context.CONNECTIVITY_SERVICE);
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return  (networkInfo != null && networkInfo.isConnected());
     }
@@ -62,7 +66,7 @@ public class UpdateRssService extends AsyncTask implements Constants {
         Intent intent = new Intent(BROADCAST_ACTION);
         intent.putExtra(STATUS_DOWNLOADING, END_DOWNLOADING);
         mService.sendBroadcast(intent);
-        ((RSSReaderService)mService).sendNotif();
+        ((RSSReaderService)mService).sendNotification();
         super.onPostExecute(o);
     }
 

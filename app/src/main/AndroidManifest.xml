@@ -29,8 +29,7 @@
         <service
             android:name=".service.RSSReaderService"
             android:enabled="true"
-            android:exported="true"
-            android:process=":myservice">
+            android:exported="true">
         </service>
     </application>
 

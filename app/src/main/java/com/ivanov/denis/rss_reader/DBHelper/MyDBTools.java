@@ -29,8 +29,11 @@ public class MyDBTools implements Constants {
                 String.valueOf(item.getMpubDate().getTime()),
                 item.getTitle()
         };
-        Cursor cursor = db.query(TABLE_NAME, columns, selection, selection_args, null, null, null);
-        return (cursor.getCount() > 0);
+        int count;
+        try(Cursor cursor = db.query(TABLE_NAME, columns, selection, selection_args, null, null, null)){
+            count = cursor.getCount();
+        }
+        return (count > 0);
     }
 
     public void delete(Item item){
@@ -76,8 +79,11 @@ public class MyDBTools implements Constants {
         String[] selection_args = new String[]{
                 "0"
         };
-        Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, null);
-        return cursor.getColumnCount();
+        int count;
+        try (Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, null)){
+            count = cursor.getCount();
+        }
+        return count;
     }
 
     public Items selectAll(boolean favorite){
@@ -91,8 +97,7 @@ public class MyDBTools implements Constants {
                     "1"
             };
         }
-        Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, orderBy);
-        try {
+        try (Cursor cursor = db.query(TABLE_NAME, null, selection, selection_args, null, null, orderBy)) {
             if (cursor.moveToFirst()) {
                 items = new Items();
                 do {
@@ -107,8 +112,6 @@ public class MyDBTools implements Constants {
                 } while (cursor.moveToNext());
             } else
                 Log.d(LOG_TAG, "0 rows");
-        } finally {
-            cursor.close();
         }
         return items;
     }
