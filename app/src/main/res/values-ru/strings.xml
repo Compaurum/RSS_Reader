@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Clear">Очистить</string>
+    <string name="Favorite">Избранные</string>
+    <string name="Telegraph">Телеграф</string>
+    <string name="Update_news">Обновить новостную ленту</string>
+    <string name="action_settings">Настройки</string>
+    <string name="added_news">Добавлены новости</string>
+    <string name="delete">Удаление</string>
+    <string name="lookOnWebSite">Посмотреть на сайте</string>
+    <string name="no">Нет</string>
+    <string name="questionDelete">Удалить новость?</string>
+    <string name="questionDeleteAll">Удалить все новости?</string>
+    <string name="turn_on_internet">"Включите интернет"</string>
+    <string name="unread_news">" непрочитанных новостей"</string>
+    <string name="yes">Да</string>
+</resources>

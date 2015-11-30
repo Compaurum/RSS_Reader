@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RSS_Reader</string>
+    <string name="app_name" translatable="false">RSSReader</string>
     <string name="action_settings">Настройки</string>
     <string name="unchekedIcon">unchekedIcon</string>
     <string name="title_activity_view_item">ViewItemActivity</string>

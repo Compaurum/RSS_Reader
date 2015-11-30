@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Clear">Очистити</string>
+    <string name="Favorite">Вибрані</string>
+    <string name="Telegraph">Телеграф</string>
+    <string name="Update_news">Оновити новини</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="added_news">Добавлені новини</string>
+    <string name="delete">Видалення</string>
+    <string name="lookOnWebSite">Дивитися на вебсайті</string>
+    <string name="no">Ні</string>
+    <string name="questionDelete">Видалити новину?</string>
+    <string name="questionDeleteAll">Видалити усі новини?</string>
+    <string name="turn_on_internet">Ввімкніть інтернет</string>
+    <string name="unread_news">" непрочитаних новин"</string>
+    <string name="yes">Так</string>
+</resources>

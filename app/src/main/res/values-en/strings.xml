@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Clear">Clear</string>
+    <string name="Favorite">Favorite</string>
+    <string name="Telegraph">Telegraph</string>
+    <string name="Update_news">Update news</string>
+    <string name="action_settings">Settings</string>
+    <string name="added_news">News added</string>
+    <string name="delete">Delete</string>
+    <string name="lookOnWebSite">Look on website</string>
+    <string name="no">No</string>
+    <string name="questionDelete">Delete item?</string>
+    <string name="questionDeleteAll">Delete all news?</string>
+    <string name="title_activity_view_item"></string>
+    <string name="turn_on_internet">Turn on Internet</string>
+    <string name="unread_news">" unread news"</string>
+    <string name="yes">Yes</string>
+</resources>
