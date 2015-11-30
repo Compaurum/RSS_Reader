@@ -7,11 +7,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Parcel;
 import android.util.Log;
 
-import com.ivanov.denis.rss_reader.DBHelper.DBHelper;
-import com.ivanov.denis.rss_reader.DBHelper.MyDBTools;
+import com.ivanov.denis.rss_reader.DBHelper222.DBHelper;
+import com.ivanov.denis.rss_reader.DBHelper222.MyDBTools;
 import com.ivanov.denis.rss_reader.MainActivity;
 import com.ivanov.denis.rss_reader.R;
 import com.ivanov.denis.rss_reader.UpdateRssService;

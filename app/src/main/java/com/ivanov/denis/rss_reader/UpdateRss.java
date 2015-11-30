@@ -6,10 +6,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ivanov.denis.rss_reader.Downloader.Downloader;
+import com.ivanov.denis.rss_reader.Downloader222.Downloader;
 import com.ivanov.denis.rss_reader.constants.Constants;
 import com.ivanov.denis.rss_reader.parser.Channel;
 import com.ivanov.denis.rss_reader.parser.RssParser;

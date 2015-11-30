@@ -1,4 +1,4 @@
-package com.ivanov.denis.rss_reader.DBHelper;
+package com.ivanov.denis.rss_reader.DBHelper222;
 
 import android.content.ContentValues;
 import android.database.Cursor;

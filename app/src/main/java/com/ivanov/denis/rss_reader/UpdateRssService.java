@@ -7,12 +7,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
-import com.ivanov.denis.rss_reader.DBHelper.DBHelper;
-import com.ivanov.denis.rss_reader.DBHelper.MyDBTools;
-import com.ivanov.denis.rss_reader.Downloader.Downloader;
+import com.ivanov.denis.rss_reader.DBHelper222.DBHelper;
+import com.ivanov.denis.rss_reader.DBHelper222.MyDBTools;
+import com.ivanov.denis.rss_reader.Downloader222.Downloader;
 import com.ivanov.denis.rss_reader.constants.Constants;
 import com.ivanov.denis.rss_reader.parser.Channel;
 import com.ivanov.denis.rss_reader.parser.Items;

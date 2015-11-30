@@ -1,4 +1,4 @@
-package com.ivanov.denis.rss_reader.Downloader;
+package com.ivanov.denis.rss_reader.Downloader222;
 
 import java.io.IOException;
 import java.io.InputStream;
