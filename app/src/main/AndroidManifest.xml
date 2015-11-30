@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.compaurum.rss_reader" >
+    package="com.ivanov.denis.rss_reader" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
+        android:installLocation="preferExternal"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
+            android:icon="@drawable/logo"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ViewItem"
-            android:label="@string/title_activity_view_item" >
+            android:icon="@drawable/logo"
+            android:label="@string/app_name" >
         </activity>
+
+        <service
+            android:name=".service.RSSReaderService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>
