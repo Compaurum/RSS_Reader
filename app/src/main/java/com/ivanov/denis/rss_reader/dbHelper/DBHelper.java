@@ -1,4 +1,4 @@
-package com.ivanov.denis.rss_reader.DBHelper222;
+package com.ivanov.denis.rss_reader.dbHelper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

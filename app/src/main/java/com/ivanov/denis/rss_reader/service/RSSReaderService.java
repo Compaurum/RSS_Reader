@@ -9,8 +9,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.ivanov.denis.rss_reader.DBHelper222.DBHelper;
-import com.ivanov.denis.rss_reader.DBHelper222.MyDBTools;
+import com.ivanov.denis.rss_reader.dbHelper.DBHelper;
+import com.ivanov.denis.rss_reader.dbHelper.MyDBTools;
 import com.ivanov.denis.rss_reader.MainActivity;
 import com.ivanov.denis.rss_reader.R;
 import com.ivanov.denis.rss_reader.UpdateRssService;

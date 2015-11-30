@@ -20,8 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ivanov.denis.rss_reader.DBHelper222.DBHelper;
-import com.ivanov.denis.rss_reader.DBHelper222.MyDBTools;
+import com.ivanov.denis.rss_reader.dbHelper.DBHelper;
+import com.ivanov.denis.rss_reader.dbHelper.MyDBTools;
 import com.ivanov.denis.rss_reader.adapter.ListAdapter;
 import com.ivanov.denis.rss_reader.constants.Constants;
 import com.ivanov.denis.rss_reader.dialog.YesNoDialog;

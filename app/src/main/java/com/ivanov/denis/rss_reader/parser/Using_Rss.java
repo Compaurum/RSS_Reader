@@ -2,7 +2,7 @@ package com.ivanov.denis.rss_reader.parser;
 
 import android.util.Log;
 
-import com.ivanov.denis.rss_reader.Downloader222.Downloader;
+import com.ivanov.denis.rss_reader.downloader.Downloader;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
