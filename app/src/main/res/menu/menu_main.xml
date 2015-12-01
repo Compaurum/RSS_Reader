@@ -18,11 +18,17 @@
         android:orderInCategory="2"
         android:title="@string/Favorite"
         android:icon="@drawable/ic_check_circle_white_36dp"
-        app:showAsAction="withText"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/clear"
         android:orderInCategory="5"
         android:title="@string/Clear"
         android:icon="@drawable/ic_delete_white_36dp"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/autoUpdate"
+        android:checkable="true"
+        android:orderInCategory="4"
+        android:title="@string/AutoUpdate"
+        app:showAsAction="never"/>
 </menu>

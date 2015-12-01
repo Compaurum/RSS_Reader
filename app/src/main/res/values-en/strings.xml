@@ -15,4 +15,5 @@
     <string name="turn_on_internet">Turn on Internet</string>
     <string name="unread_news">" unread news"</string>
     <string name="yes">Yes</string>
+    <string name="AutoUpdate">Auto update</string>
 </resources>

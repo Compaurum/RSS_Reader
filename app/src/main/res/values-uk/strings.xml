@@ -14,4 +14,5 @@
     <string name="turn_on_internet">Ввімкніть інтернет</string>
     <string name="unread_news">" непрочитаних новин"</string>
     <string name="yes">Так</string>
+    <string name="AutoUpdate">Автоматичне оновлення</string>
 </resources>

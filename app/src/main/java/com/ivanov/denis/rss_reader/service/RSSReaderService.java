@@ -72,7 +72,7 @@ public class RSSReaderService extends Service {
         // 2-я часть
         MyDBTools myDBTools = new MyDBTools(DBHelper.getInstance(this));
         notification.setLatestEventInfo(this, getString(R.string.Telegraph), myDBTools.countUnreadNews()+getString(R.string.unread_news), pIntent);
-        myDBTools.close();
+        //myDBTools.close();
         // ставим флаг, чтобы уведомление пропало после нажатия
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         // отправляем

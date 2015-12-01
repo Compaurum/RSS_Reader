@@ -16,4 +16,5 @@
     <string name="Telegraph">Телеграф</string>
     <string name="unread_news">" непрочитанных новостей"</string>
     <string name="turn_on_internet">"Включите интернет"</string>
+    <string name="AutoUpdate">Автоматическое обновление</string>
 </resources>

@@ -10,7 +10,6 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -20,10 +19,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ivanov.denis.rss_reader.dbHelper.DBHelper;
-import com.ivanov.denis.rss_reader.dbHelper.MyDBTools;
 import com.ivanov.denis.rss_reader.adapter.ListAdapter;
 import com.ivanov.denis.rss_reader.constants.Constants;
+import com.ivanov.denis.rss_reader.dbHelper.DBHelper;
+import com.ivanov.denis.rss_reader.dbHelper.MyDBTools;
 import com.ivanov.denis.rss_reader.dialog.YesNoDialog;
 import com.ivanov.denis.rss_reader.dialog.YesNoDialogListener;
 import com.ivanov.denis.rss_reader.parser.Item;
@@ -42,6 +41,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     private BroadcastReceiver mReceiver;
     private ServiceConnection mServiceConnection;
     private boolean mBound = false;
+    private boolean mAutoUpdate = true;
     private SharedPreferences mSharedPreferences;
     Intent rssReaderServiceIntent;
     private MyDBTools mMyDbTools;
@@ -99,7 +99,10 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         Log.d("MAINACTIVITY", "ONDestroy");
         unregisterReceiver(mReceiver);
         if (mProgressDialog != null) mProgressDialog.dismiss();
-        mMyDbTools.close();
+        if (!mAutoUpdate) {
+            stopService();
+            mMyDbTools.close();
+        }
         savePreferences();
         super.onDestroy();
     }
@@ -125,6 +128,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.update).setEnabled(mUpdateButtonEnabled);
+        menu.findItem(R.id.autoUpdate).setChecked(mAutoUpdate);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -136,6 +140,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
                 return true;
             case R.id.update:
                 if (UpdateRssService.isInternet(this)) {
+                    setProgressDialog(true);
                     startService(rssReaderServiceIntent);
                 }else {
                     Toast.makeText(this, R.string.turn_on_internet, Toast.LENGTH_SHORT).show();
@@ -152,6 +157,9 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
                 break;
             case R.id.clear:
                 showDialog(YES_NO_DIALOG_DELETE_ALL);
+                break;
+            case R.id.autoUpdate:
+                mAutoUpdate = !mAutoUpdate;
                 break;
             default:
                 break;
@@ -184,18 +192,18 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         }
     };
 
-    private void setProgressDialog(boolean bool) {
+    void setProgressDialog(boolean bool) {
         if (bool) {
             mUpdateButtonEnabled = false;
             mProgressDialog = new ProgressDialog(MainActivity.this);
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.setMessage("Downloading news");
-            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCancelable(true);
             mProgressDialog.show();
         } else {
             mUpdateButtonEnabled = true;
-            mProgressDialog.dismiss();
+            if (mProgressDialog != null) mProgressDialog.dismiss();
         }
     }
 
@@ -259,18 +267,24 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         if (mSharedPreferences == null) mSharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putBoolean(FAVORITE, mFavorite);
+        editor.putBoolean(AUTO_UPDATE, mAutoUpdate);
         editor.apply();
     }
 
     private  void loadPreferences(){
         mSharedPreferences = getPreferences(MODE_PRIVATE);
         mFavorite = mSharedPreferences.getBoolean(FAVORITE, false);
+        mAutoUpdate = mSharedPreferences.getBoolean(AUTO_UPDATE, true);
     }
-    public void stopService(View view) {
+    public void stopService() {
         if (mBound) {
             unbindService(mServiceConnection);
             mBound = false;
         }
         stopService(new Intent(this, RSSReaderService.class));
+    }
+
+    public boolean isAutoUpdate() {
+        return mAutoUpdate;
     }
 }
