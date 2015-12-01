@@ -45,6 +45,8 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     private boolean mBound = false;
     private SharedPreferences mSharedPreferences;
     Intent rssReaderServiceIntent;
+    private MyDBTools mMyDbTools;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         setContentView(R.layout.activity_main);
 
         rssReaderServiceIntent = new Intent(this, RSSReaderService.class);
+        mMyDbTools = new MyDBTools(DBHelper.getInstance(this));
         mLvMain = (ListView) findViewById(android.R.id.list);
         mAdapter = new ListAdapter(this, mFeeds);
         mLvMain.setAdapter(mAdapter);
@@ -60,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         mReceiver = new Receiver(this);
         registerReceiver(mReceiver, new IntentFilter(BROADCAST_ACTION));
         loadPreferences();
-        loadFromBase(null, mFavorite);
+        loadFromBase(mFavorite);
 
         mServiceConnection = new ServiceConnection() {
             public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -96,7 +99,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         Log.d("MAINACTIVITY", "ONDestroy");
         unregisterReceiver(mReceiver);
         if (mProgressDialog != null) mProgressDialog.dismiss();
-        Log.d("MAINACTIVITY", "ONDestroy");
+        mMyDbTools.close();
         savePreferences();
         super.onDestroy();
     }
@@ -145,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
                 } else {
                     item.setIcon(R.drawable.ic_check_circle_white_36dp);
                 }
-                loadFromBase(null, mFavorite);
+                loadFromBase(mFavorite);
                 break;
             case R.id.clear:
                 showDialog(YES_NO_DIALOG_DELETE_ALL);
@@ -197,10 +200,8 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     }
 
     public void update(Items list) {
-        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
-        myDBTools.insert(list);
-        loadFromBase(myDBTools, mFavorite);
-        myDBTools.close();
+        mMyDbTools.insert(list);
+        loadFromBase(mFavorite);
     }
 
     public void updateListView() {
@@ -208,37 +209,23 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     }
 
     public void deleteAll() {
-        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
-        myDBTools.deleteAll();
-        myDBTools.close();
+        mMyDbTools.deleteAll();
         mFeeds.clear();
         updateListView();
     }
 
     public void delete(Item item) {
-        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
-        myDBTools.delete(item);
-        myDBTools.close();
+        mMyDbTools.delete(item);
         mFeeds.remove(item);
         updateListView();
     }
 
     public void update(Item item) {
-        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
-        myDBTools.update(item);
-        myDBTools.close();
+        mMyDbTools.update(item);
     }
 
-    public void loadFromBase(@Nullable MyDBTools tools, boolean favorite) {
-        MyDBTools myDBTools;
-        if (tools == null) {
-            myDBTools = new MyDBTools(new DBHelper(this));
-        } else {
-            myDBTools = tools;
-        }
-
-        Items items = myDBTools.selectAll(favorite);
-        myDBTools.close();
+    public void loadFromBase(boolean favorite) {
+        Items items = mMyDbTools.selectAll(favorite);
         this.mFeeds.clear();
         if (items != null) {
             this.mFeeds.addAll(items);

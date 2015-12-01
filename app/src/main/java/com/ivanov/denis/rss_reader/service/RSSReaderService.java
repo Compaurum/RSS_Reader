@@ -70,7 +70,7 @@ public class RSSReaderService extends Service {
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
         // 2-я часть
-        MyDBTools myDBTools = new MyDBTools(new DBHelper(this));
+        MyDBTools myDBTools = new MyDBTools(DBHelper.getInstance(this));
         notification.setLatestEventInfo(this, getString(R.string.Telegraph), myDBTools.countUnreadNews()+getString(R.string.unread_news), pIntent);
         myDBTools.close();
         // ставим флаг, чтобы уведомление пропало после нажатия

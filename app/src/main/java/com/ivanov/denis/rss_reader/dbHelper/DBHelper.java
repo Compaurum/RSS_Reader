@@ -9,9 +9,22 @@ import com.ivanov.denis.rss_reader.constants.Constants;
 
 public class DBHelper extends SQLiteOpenHelper implements Constants {
 
-    public DBHelper(Context context) {
+    private static volatile DBHelper instance;
+
+    private DBHelper(Context context) {
         // конструктор суперкласса
         super(context, "MyDB", null, 3);
+    }
+
+    public static DBHelper getInstance(Context context){
+        if (instance == null){
+            synchronized (DBHelper.class){
+                if (instance == null){
+                    instance = new DBHelper(context);
+                }
+            }
+        }
+        return instance;
     }
 
     @Override

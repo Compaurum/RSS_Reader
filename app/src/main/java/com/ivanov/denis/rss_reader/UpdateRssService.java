@@ -57,7 +57,7 @@ public class UpdateRssService extends AsyncTask implements Constants {
     @Override
     protected void onPostExecute(Object o) {
         Items items = ((Channel) o).getItems();
-        MyDBTools myDBTools = new MyDBTools(new DBHelper(mService));
+        MyDBTools myDBTools = new MyDBTools(DBHelper.getInstance(mService));
         myDBTools.insert(items);
         myDBTools.close();
         myDBTools = null;
