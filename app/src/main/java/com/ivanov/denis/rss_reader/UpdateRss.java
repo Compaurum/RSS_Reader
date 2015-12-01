@@ -45,13 +45,13 @@ public class UpdateRss extends AsyncTask implements Constants {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mContext.setProgressDialog(true);
+        //mContext.setProgressDialog(true);
     }
 
     @Override
     protected void onPostExecute(Object o) {
         mContext.update(((Channel) o).getItems());
-        mContext.setProgressDialog(false);
+        //mContext.setProgressDialog(false);
         super.onPostExecute(o);
     }
 
@@ -73,6 +73,6 @@ public class UpdateRss extends AsyncTask implements Constants {
     @Override
     protected void onCancelled() {
         super.onCancelled();
-        mContext.setProgressDialog(false);
+        //mContext.setProgressDialog(false);
     }
 }

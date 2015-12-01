@@ -94,7 +94,7 @@ public class MyDBTools implements Constants {
 
     public Items selectAll(boolean favorite){
         Items items = null;
-        String orderBy = Fields.readed.name() + ", " + Fields.date.name() + " desc ";
+        String orderBy = Fields.date.name() + " desc ";
         String selection = null;
         String[] selection_args = null;
         if (favorite){

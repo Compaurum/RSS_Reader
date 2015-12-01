@@ -39,7 +39,6 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
     private ListAdapter mAdapter;
     private boolean mUpdateButtonEnabled = true;
     private ProgressDialog mProgressDialog;
-    private DBHelper mDBHelper;
     private BroadcastReceiver mReceiver;
     private ServiceConnection mServiceConnection;
     private boolean mBound = false;
@@ -64,6 +63,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         registerReceiver(mReceiver, new IntentFilter(BROADCAST_ACTION));
         loadPreferences();
         loadFromBase(mFavorite);
+        startService(rssReaderServiceIntent);
 
         mServiceConnection = new ServiceConnection() {
             public void onServiceConnected(ComponentName name, IBinder binder) {
@@ -184,7 +184,7 @@ public class MainActivity extends ActionBarActivity implements Constants, YesNoD
         }
     };
 
-    public void setProgressDialog(boolean bool) {
+    private void setProgressDialog(boolean bool) {
         if (bool) {
             mUpdateButtonEnabled = false;
             mProgressDialog = new ProgressDialog(MainActivity.this);

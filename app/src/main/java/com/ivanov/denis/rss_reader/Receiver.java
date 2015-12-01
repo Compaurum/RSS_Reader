@@ -21,12 +21,12 @@ public class Receiver extends BroadcastReceiver implements Constants{
         switch (intent.getAction()){
             case BROADCAST_ACTION:
                 if (intent.getIntExtra(STATUS_DOWNLOADING, 999) == START_DOWNLOADING){
-                    mContext.setProgressDialog(true);
+                    //mContext.setProgressDialog(true);
                 } else if (intent.getIntExtra(STATUS_DOWNLOADING, 999) == END_DOWNLOADING){
-                    mContext.setProgressDialog(false);
+                    //mContext.setProgressDialog(false);
                     mContext.loadFromBase(false);
                 }else if (intent.getIntExtra(STATUS_DOWNLOADING, 999) == ERROR_DOWNLOADING){
-                    mContext.setProgressDialog(false);
+                    //mContext.setProgressDialog(false);
                 }
         }
         mContext.updateListView();
